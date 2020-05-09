@@ -1,14 +1,15 @@
 package ce.yildiz.calendarapp.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ce.yildiz.calendarapp.databinding.ActivityMainBinding;
+import ce.yildiz.calendarapp.ui.day.DayDetailActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +23,11 @@ public class MainActivity extends AppCompatActivity {
         binding.calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Toast.makeText(MainActivity.this, "Date: " + dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
+                Intent dayDetailIntent = new Intent(MainActivity.this, DayDetailActivity.class);
+                dayDetailIntent.putExtra("year", year);
+                dayDetailIntent.putExtra("month", month);
+                dayDetailIntent.putExtra("day", dayOfMonth);
+                startActivity(dayDetailIntent);
             }
         });
     }
