@@ -80,8 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
                             DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
 
                             Map<String, Object> user = new HashMap<>();
-                            user.put("email", email);
-                            user.put("gUsername", githubUsername);
+                            user.put(Constants.UserFields.EMAIL, email);
+                            user.put(Constants.UserFields.GITHUB_USERNAME, githubUsername);
 
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
