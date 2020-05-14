@@ -12,5 +12,6 @@ public final class Constants {
     public static final class UserFields {
         public static final String EMAIL = "email";
         public static final String GITHUB_USERNAME = "gUsername";
+        public static final String EVENTS = "events";
     }
 }
