@@ -10,9 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityRegisterBinding;
@@ -22,6 +29,7 @@ import ce.yildiz.calendarapp.util.Constants;
 public class RegisterActivity extends AppCompatActivity {
     private ActivityRegisterBinding binding;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +40,14 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(root);
 
         mAuth = FirebaseAuth.getInstance();
-
-        if (mAuth.getCurrentUser() != null) {
-            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(mainIntent);
-            finish();
-        }
+        db = FirebaseFirestore.getInstance();
 
         binding.signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String email = binding.signUpEmailEt.getText().toString().trim();
                 final String password = binding.signUpPasswordEt.getText().toString().trim();
+                final String githubUsername = binding.signUpGithubUsernameEt.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     binding.signUpEmailEt.setError(getString(R.string.field_empty_message));
@@ -60,12 +64,39 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                if (TextUtils.isEmpty(githubUsername)) {
+                    binding.signUpGithubUsernameEt.setError(getString(R.string.field_empty_message));
+                }
+
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this,
-                                    R.string.registration_ok_message, Toast.LENGTH_SHORT).show();
+                            if (mAuth.getCurrentUser() == null) {
+                                return;
+                            }
+
+                            String userId = mAuth.getCurrentUser().getUid();
+                            DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
+
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("email", email);
+                            user.put("gUsername", githubUsername);
+
+                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(RegisterActivity.this,
+                                            R.string.registration_ok_message, Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(RegisterActivity.this,
+                                            R.string.registration_error_message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                             Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(mainIntent);
                         } else {
@@ -76,6 +107,5 @@ public class RegisterActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 }

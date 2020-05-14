@@ -54,7 +54,7 @@
     <string name="field_empty_message">Field cannot be empty</string>
     <string name="password_short_error">Password is too short</string>
     <string name="registration_ok_message">Registration completed successfully</string>
-    <string name="registration_error_message">Error registration</string>
+    <string name="registration_error_message">Registration failed</string>
     <string name="logout">Logout</string>
     <string name="login_ok_message">Logged in</string>
     <string name="login_error_message">Cannot login</string>
