@@ -8,8 +8,11 @@ import android.widget.CalendarView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ce.yildiz.calendarapp.databinding.ActivityMainBinding;
 import ce.yildiz.calendarapp.ui.day.DayDetailActivity;
+import ce.yildiz.calendarapp.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +31,16 @@ public class MainActivity extends AppCompatActivity {
                 dayDetailIntent.putExtra("month", month);
                 dayDetailIntent.putExtra("day", dayOfMonth);
                 startActivity(dayDetailIntent);
+            }
+        });
+
+        binding.logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+                finish();
             }
         });
     }

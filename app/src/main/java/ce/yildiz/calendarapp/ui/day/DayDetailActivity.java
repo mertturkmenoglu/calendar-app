@@ -20,22 +20,22 @@ public class DayDetailActivity extends AppCompatActivity {
 
         Intent incomingIntent = getIntent();
 
-         if (incomingIntent == null) {
-             finish();
-             return;
-         }
+        if (incomingIntent == null) {
+            finish();
+            return;
+        }
 
-         final int year = incomingIntent.getIntExtra("year", 0);
-         final int month = incomingIntent.getIntExtra("month", 0);
-         final int day = incomingIntent.getIntExtra("day", 0);
+        final int year = incomingIntent.getIntExtra("year", 0);
+        final int month = incomingIntent.getIntExtra("month", 0);
+        final int day = incomingIntent.getIntExtra("day", 0);
 
-         if (year == 0 || month == 0 || day == 0) {
-             Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
-             finish();
-             return;
-         }
+        if (year == 0 || month == 0 || day == 0) {
+            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-         String dateText = day + "/" + month + "/" + year;
-         binding.dayDetailDateText.setText(dateText);
+        String dateText = day + "/" + month + "/" + year;
+        binding.dayDetailDateText.setText(dateText);
     }
 }
