@@ -34,6 +34,15 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        binding.loginForgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent passwordResetIntent = new Intent(LoginActivity.this, PasswordResetActivity.class);
+                startActivity(passwordResetIntent);
+                finish();
+            }
+        });
+
         binding.loginSignUpText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
