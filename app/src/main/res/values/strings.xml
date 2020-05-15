@@ -84,6 +84,9 @@
     <string name="update_error_message">Updated failed</string>
     <string name="format_error_message">Wrong format</string>
     <string name="share">Share</string>
+    <string name="new_event">New Event</string>
+    <string name="new_event_ok_message">New Event Added</string>
+    <string name="new_event_error_message">Event add failed</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

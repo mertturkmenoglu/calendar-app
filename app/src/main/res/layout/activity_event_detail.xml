@@ -201,7 +201,7 @@
             android:textColor="@android:color/black"
             android:textColorHint="@android:color/secondary_text_dark"
             android:textSize="18sp"
-            android:inputType="numberDecimal"
+            android:inputType="textNoSuggestions"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toTopOf="@id/event_detail_reminder_freq_text"
             app:layout_constraintEnd_toEndOf="parent"

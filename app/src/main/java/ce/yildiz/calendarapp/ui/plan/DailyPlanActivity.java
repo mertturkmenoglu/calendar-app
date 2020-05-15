@@ -116,5 +116,18 @@ public class DailyPlanActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        binding.addNewEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // With no extras, event detail activity
+                // acts like a new event saver activity
+                Intent eventDetailIntent = new Intent(DailyPlanActivity.this,
+                        EventDetailActivity.class);
+
+                startActivity(eventDetailIntent);
+                finish();
+            }
+        });
     }
 }
