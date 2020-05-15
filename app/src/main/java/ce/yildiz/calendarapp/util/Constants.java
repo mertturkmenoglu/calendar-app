@@ -18,4 +18,5 @@ public final class Constants {
 
     public static final long ONE_MONTH_IN_MILLIS = 1000L * 60 * 60 * 24 * 30;
     public static final long ONE_WEEK_IN_MILLIS = 1000L * 60 * 60 * 24 * 7;
+    public static final long ONE_DAY_IN_MILLIS = 1000L * 60 * 60 * 24;
 }

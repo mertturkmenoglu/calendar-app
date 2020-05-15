@@ -19,8 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityMainBinding;
-import ce.yildiz.calendarapp.ui.detail.DayDetailActivity;
 import ce.yildiz.calendarapp.ui.login.LoginActivity;
+import ce.yildiz.calendarapp.ui.plan.DailyPlanActivity;
 import ce.yildiz.calendarapp.ui.plan.MonthlyPlanActivity;
 import ce.yildiz.calendarapp.ui.plan.WeeklyPlanActivity;
 import ce.yildiz.calendarapp.util.Constants;
@@ -73,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
         binding.calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Intent dayDetailIntent = new Intent(MainActivity.this, DayDetailActivity.class);
-                dayDetailIntent.putExtra("year", year);
-                dayDetailIntent.putExtra("month", month);
-                dayDetailIntent.putExtra("day", dayOfMonth);
-                startActivity(dayDetailIntent);
+                Intent dailyPlanIntent = new Intent(MainActivity.this, DailyPlanActivity.class);
+                dailyPlanIntent.putExtra("year", year);
+                dailyPlanIntent.putExtra("month", month);
+                dailyPlanIntent.putExtra("day", dayOfMonth);
+                startActivity(dailyPlanIntent);
             }
         });
 
