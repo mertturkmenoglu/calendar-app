@@ -60,4 +60,6 @@
     <string name="login_error_message">Cannot login</string>
     <string name="password_reset_link_send_ok_message">Password reset link send to email</string>
     <string name="password_reset_link_send_error_message">Password reset link could not send to email</string>
+    <string name="weekly_plan">Weekly Plan</string>
+    <string name="monthly_plan">Monthly Plan</string>
 </resources>

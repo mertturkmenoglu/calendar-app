@@ -1,4 +1,4 @@
-package ce.yildiz.calendarapp.modal;
+package ce.yildiz.calendarapp.model;
 
 import com.google.firebase.firestore.GeoPoint;
 

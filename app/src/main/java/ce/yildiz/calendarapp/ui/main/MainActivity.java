@@ -19,8 +19,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityMainBinding;
-import ce.yildiz.calendarapp.ui.day.DayDetailActivity;
+import ce.yildiz.calendarapp.ui.detail.DayDetailActivity;
 import ce.yildiz.calendarapp.ui.login.LoginActivity;
+import ce.yildiz.calendarapp.ui.plan.MonthlyPlanActivity;
+import ce.yildiz.calendarapp.ui.plan.WeeklyPlanActivity;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.StringUtil;
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String userId = mAuth.getCurrentUser().getUid();
+        final String userId = mAuth.getCurrentUser().getUid();
 
         DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -76,6 +78,22 @@ public class MainActivity extends AppCompatActivity {
                 dayDetailIntent.putExtra("month", month);
                 dayDetailIntent.putExtra("day", dayOfMonth);
                 startActivity(dayDetailIntent);
+            }
+        });
+
+        binding.mainWeeklyPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent weeklyPlanIntent = new Intent(MainActivity.this, WeeklyPlanActivity.class);
+                startActivity(weeklyPlanIntent);
+            }
+        });
+
+        binding.mainMonthlyPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent monthlyPlanIntent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
+                startActivity(monthlyPlanIntent);
             }
         });
 

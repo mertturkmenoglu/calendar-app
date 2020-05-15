@@ -7,6 +7,7 @@ public final class Constants {
 
     public static final class Collections {
         public static final String USERS = "Users";
+        public static final String USER_EVENTS = "Events";
     }
 
     public static final class UserFields {

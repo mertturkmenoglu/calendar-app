@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,7 +82,6 @@ public class RegisterActivity extends AppCompatActivity {
                             Map<String, Object> user = new HashMap<>();
                             user.put(Constants.UserFields.EMAIL, email);
                             user.put(Constants.UserFields.GITHUB_USERNAME, githubUsername);
-                            user.put(Constants.UserFields.EVENTS, new ArrayList());
 
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -98,6 +96,18 @@ public class RegisterActivity extends AppCompatActivity {
                                             R.string.registration_error_message, Toast.LENGTH_SHORT).show();
                                 }
                             });
+
+                            Map<String, Object> events = new HashMap<>();
+
+                            documentReference.collection(Constants.Collections.USER_EVENTS)
+                                    .document().set(events)
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(RegisterActivity.this,
+                                                    R.string.registration_error_message, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
                             Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(mainIntent);
