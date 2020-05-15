@@ -64,7 +64,7 @@ public class MonthlyPlanActivity extends AppCompatActivity {
 
                             for (QueryDocumentSnapshot document : snapshot) {
                                 Event e = document.toObject(Event.class);
-                                if (e.getStartDate().before(oneMonthAfter) && e.getStartDate().after(oneMonthBefore)) {
+                                if (e.getStartDate() != null && e.getStartDate().before(oneMonthAfter) && e.getStartDate().after(oneMonthBefore)) {
                                     events.add(document.toObject(Event.class));
                                 }
                             }

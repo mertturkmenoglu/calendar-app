@@ -64,7 +64,7 @@ public class WeeklyPlanActivity extends AppCompatActivity {
 
                             for (QueryDocumentSnapshot document : snapshot) {
                                 Event e = document.toObject(Event.class);
-                                if (e.getStartDate().before(oneWeekAfter) && e.getStartDate().after(oneWeekBefore)) {
+                                if (e.getStartDate() != null && e.getStartDate().before(oneWeekAfter) && e.getStartDate().after(oneWeekBefore)) {
                                     events.add(document.toObject(Event.class));
                                 }
                             }

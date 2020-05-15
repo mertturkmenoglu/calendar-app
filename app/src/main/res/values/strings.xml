@@ -75,6 +75,7 @@
     <string name="month_events">This Month\'s Events</string>
     <string name="no_data_available">You completed all the events!!!</string>
     <string name="week_events">This Week\'s Events</string>
+    <string name="no_events_message">You don\'t have any events</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>
