@@ -15,4 +15,7 @@ public final class Constants {
         public static final String GITHUB_USERNAME = "gUsername";
         public static final String EVENTS = "events";
     }
+
+    public static final long ONE_MONTH_IN_MILLIS = 1000L * 60 * 60 * 24 * 30;
+    public static final long ONE_WEEK_IN_MILLIS = 1000L * 60 * 60 * 24 * 7;
 }

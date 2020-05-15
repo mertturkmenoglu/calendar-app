@@ -1,8 +1,316 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.detail.EventDetailActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/event_detail_event_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/event_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_event_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/event_detail_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:alpha="0.90"
+            android:autofillHints=""
+            android:background="@drawable/rounded_edit_text_shape"
+            android:ems="14"
+            android:fontFamily="@font/montserrat"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/secondary_text_dark"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_detail_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_event_name_text"
+            app:layout_constraintTop_toTopOf="@id/event_detail_event_name_text"
+            tools:text="NAME" />
+
+        <TextView
+            android:id="@+id/event_detail_detail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/event_detail"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_detail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_event_name"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_event_name" />
+
+        <EditText
+            android:id="@+id/event_detail_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:alpha="0.90"
+            android:autofillHints=""
+            android:background="@drawable/rounded_edit_text_shape"
+            android:ems="14"
+            android:fontFamily="@font/montserrat"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/secondary_text_dark"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_start_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/event_detail_detail_text"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_detail_text"
+            tools:text="DETAIL" />
+
+        <TextView
+            android:id="@+id/event_detail_start_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/start_date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_end_date_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_detail"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_detail" />
+
+        <TextView
+            android:id="@+id/event_detail_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            tools:text="01/01/1970"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toBottomOf="@id/event_detail_start_date_text"
+            app:layout_constraintEnd_toEndOf="@id/event_detail_detail"
+            app:layout_constraintStart_toEndOf="@id/event_detail_start_date_text"
+            app:layout_constraintTop_toTopOf="@id/event_detail_start_date_text" />
+
+        <TextView
+            android:id="@+id/event_detail_end_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/end_date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_change_start_date_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_start_date_text"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_start_date_text" />
+
+        <TextView
+            android:id="@+id/event_detail_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            tools:text="01/01/2020"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toBottomOf="@id/event_detail_end_date_text"
+            app:layout_constraintEnd_toEndOf="@id/event_detail_detail"
+            app:layout_constraintStart_toStartOf="@id/event_detail_start_date"
+            app:layout_constraintTop_toTopOf="@id/event_detail_end_date_text" />
+
+        <Button
+            android:id="@+id/event_detail_change_start_date_button"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/login_button_shape"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/change_start_date"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="@id/event_detail_end_date_text"
+            app:layout_constraintEnd_toStartOf="@id/event_detail_change_end_date_button"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_end_date_text"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_location_text"/>
+
+        <Button
+            android:id="@+id/event_detail_change_end_date_button"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_button_shape"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/change_end_date"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toEndOf="@id/event_detail_change_start_date_button"
+            app:layout_constraintEnd_toEndOf="@id/event_detail_detail"
+            app:layout_constraintTop_toTopOf="@id/event_detail_change_start_date_button"
+            app:layout_constraintBottom_toBottomOf="@id/event_detail_change_start_date_button" />
+
+        <TextView
+            android:id="@+id/event_detail_location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_end_date_text"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_change_start_date_button" />
+
+        <EditText
+            android:id="@+id/event_detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:alpha="0.90"
+            android:autofillHints=""
+            android:background="@drawable/rounded_edit_text_shape"
+            android:ems="14"
+            android:fontFamily="@font/montserrat"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/secondary_text_dark"
+            android:textSize="18sp"
+            android:inputType="numberDecimal"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_reminder_freq_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_location_text"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_location_text"
+            tools:text="LOCATION" />
+
+        <TextView
+            android:id="@+id/event_detail_reminder_freq_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/reminder_frequency"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_reminder_freq"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_location"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_location" />
+
+        <Spinner
+            android:id="@+id/event_detail_reminder_freq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_reminder_freq_text"
+            app:layout_constraintStart_toStartOf="@id/event_detail_reminder_freq_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_reminder_type_text" />
+
+        <TextView
+            android:id="@+id/event_detail_reminder_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/reminder_type"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_reminder_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_reminder_freq"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_reminder_freq" />
+
+        <Spinner
+            android:id="@+id/event_detail_reminder_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_reminder_type_text"
+            app:layout_constraintStart_toStartOf="@id/event_detail_reminder_type_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_type_text" />
+
+        <TextView
+            android:id="@+id/event_detail_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/event_type"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/event_detail_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_reminder_type"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_reminder_type" />
+
+        <EditText
+            android:id="@+id/event_detail_type"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:alpha="0.90"
+            android:autofillHints=""
+            android:background="@drawable/rounded_edit_text_shape"
+            android:ems="14"
+            android:fontFamily="@font/montserrat"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/secondary_text_dark"
+            android:textSize="18sp"
+            android:inputType="text"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toBottomOf="@id/event_detail_save_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/event_detail_type_text"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_type_text"
+            tools:text="TYPE" />
+
+        <Button
+            android:id="@+id/event_detail_save_button"
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/login_button_shape"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/save"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/event_detail_type" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

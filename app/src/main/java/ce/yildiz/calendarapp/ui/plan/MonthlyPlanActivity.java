@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import ce.yildiz.calendarapp.databinding.ActivityMonthlyPlanBinding;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
@@ -57,8 +58,15 @@ public class MonthlyPlanActivity extends AppCompatActivity {
                             QuerySnapshot snapshot = task.getResult();
                             if (snapshot == null) return;
 
+                            Date currentDate = new Date();
+                            Date oneMonthBefore = new Date(currentDate.getTime() - Constants.ONE_MONTH_IN_MILLIS);
+                            Date oneMonthAfter = new Date(currentDate.getTime() + Constants.ONE_MONTH_IN_MILLIS);
+
                             for (QueryDocumentSnapshot document : snapshot) {
-                                events.add(document.toObject(Event.class));
+                                Event e = document.toObject(Event.class);
+                                if (e.getStartDate().before(oneMonthAfter) && e.getStartDate().after(oneMonthBefore)) {
+                                    events.add(document.toObject(Event.class));
+                                }
                             }
 
                             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MonthlyPlanActivity.this);
@@ -79,6 +87,14 @@ public class MonthlyPlanActivity extends AppCompatActivity {
                             EventListAdapter adapter = new EventListAdapter(MonthlyPlanActivity.this,
                                     events, listener);
                             binding.monthlyRecyclerView.setAdapter(adapter);
+
+                            if (events.isEmpty()) {
+                                binding.monthlyRecyclerView.setVisibility(View.GONE);
+                                binding.emptyView.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.monthlyRecyclerView.setVisibility(View.VISIBLE);
+                                binding.emptyView.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });
