@@ -23,6 +23,7 @@ import ce.yildiz.calendarapp.ui.login.LoginActivity;
 import ce.yildiz.calendarapp.ui.plan.DailyPlanActivity;
 import ce.yildiz.calendarapp.ui.plan.MonthlyPlanActivity;
 import ce.yildiz.calendarapp.ui.plan.WeeklyPlanActivity;
+import ce.yildiz.calendarapp.ui.settings.SettingsActivity;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.StringUtil;
 
@@ -94,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent monthlyPlanIntent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
                 startActivity(monthlyPlanIntent);
+            }
+        });
+
+        binding.mainSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
             }
         });
 

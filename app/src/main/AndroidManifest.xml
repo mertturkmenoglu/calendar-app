@@ -11,7 +11,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.plan.DailyPlanActivity"></activity>
+        <activity android:name=".ui.settings.SettingsActivity"></activity>
+        <activity android:name=".ui.plan.DailyPlanActivity" />
         <activity android:name=".ui.detail.EventDetailActivity" />
         <activity android:name=".ui.plan.MonthlyPlanActivity" />
         <activity android:name=".ui.plan.WeeklyPlanActivity" />

@@ -37,7 +37,7 @@
     <string name="reset_password">Reset password</string>
     <string name="update">Update</string>
     <string name="send_email">Send Email</string>
-    <string name="settings">Settings</string>
+    <string name="settings">SETTINGS</string>
     <string name="notes">Notes</string>
     <string name="sensors">Sensors</string>
     <string name="my_note">My Note</string>
@@ -77,6 +77,11 @@
     <string name="week_events">This Week\'s Events</string>
     <string name="no_events_message">You don\'t have any events</string>
     <string name="day_events">Day\'s Events</string>
+    <string name="default_sound">Default Sound</string>
+    <string name="default_reminder_frequency">Default Reminder Frequency</string>
+    <string name="app_theme">App Theme</string>
+    <string name="update_ok_message">Updated successfully</string>
+    <string name="update_error_message">Updated failed</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>
@@ -85,5 +90,9 @@
     <string-array name="reminder_type">
         <item>Vibration</item>
         <item>Sound</item>
+    </string-array>
+    <string-array name="app_theme">
+        <item>Light</item>
+        <item>Dark</item>
     </string-array>
 </resources>

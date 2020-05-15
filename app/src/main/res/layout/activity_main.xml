@@ -44,15 +44,14 @@
         android:id="@+id/main_weekly_plan_button"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
         android:text="@string/weekly_plan"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@id/main_monthly_plan_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/main_settings_button"
+        app:layout_constraintEnd_toStartOf="@id/main_monthly_plan_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/calendar_view" />
 
@@ -60,23 +59,36 @@
         android:id="@+id/main_monthly_plan_button"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
         android:text="@string/monthly_plan"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@id/logout_button"
+        app:layout_constraintBottom_toBottomOf="@id/main_weekly_plan_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_weekly_plan_button"
+        app:layout_constraintTop_toTopOf="@id/main_weekly_plan_button" />
+
+    <Button
+        android:id="@+id/main_settings_button"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_button_shape"
+        android:fontFamily="@font/montserrat"
+        android:text="@string/settings"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/main_weekly_plan_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_weekly_plan_button" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/logout_button" />
 
     <Button
         android:id="@+id/logout_button"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
         android:text="@string/logout"
@@ -85,7 +97,7 @@
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_settings_button"
         app:layout_constraintTop_toBottomOf="@id/main_monthly_plan_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
