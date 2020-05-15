@@ -6,14 +6,22 @@ public class User {
     private String email;
     private String gUsername;
     private List<Event> events;
+    private String defaultSound;
+    private String defaultReminderFreq;
+    private String appTheme;
 
     public User() {
+
     }
 
-    public User(String email, String gUsername, List<Event> events) {
+    public User(String email, String gUsername, List<Event> events, String defaultSound,
+                String defaultReminderFreq, String appTheme) {
         this.email = email;
         this.gUsername = gUsername;
         this.events = events;
+        this.defaultSound = defaultSound;
+        this.defaultReminderFreq = defaultReminderFreq;
+        this.appTheme = appTheme;
     }
 
     public String getEmail() {
@@ -40,6 +48,30 @@ public class User {
         this.events = events;
     }
 
+    public String getDefaultSound() {
+        return defaultSound;
+    }
+
+    public void setDefaultSound(String defaultSound) {
+        this.defaultSound = defaultSound;
+    }
+
+    public String getDefaultReminderFreq() {
+        return defaultReminderFreq;
+    }
+
+    public void setDefaultReminderFreq(String defaultReminderFreq) {
+        this.defaultReminderFreq = defaultReminderFreq;
+    }
+
+    public String getAppTheme() {
+        return appTheme;
+    }
+
+    public void setAppTheme(String appTheme) {
+        this.appTheme = appTheme;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -52,6 +84,9 @@ public class User {
                 "email='" + email + '\'' +
                 ", gUsername='" + gUsername + '\'' +
                 ", events=" + sb.toString() +
+                ", defaultSound='" + defaultSound + '\'' +
+                ", defaultReminderFreq='" + defaultReminderFreq + '\'' +
+                ", appTheme='" + appTheme + '\'' +
                 '}';
     }
 }

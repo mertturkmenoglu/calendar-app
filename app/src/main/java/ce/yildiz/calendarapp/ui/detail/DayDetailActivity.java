@@ -74,6 +74,9 @@ public class DayDetailActivity extends AppCompatActivity {
 
                     final String email = documentSnapshot.getString(Constants.UserFields.EMAIL);
                     final String gUsername = documentSnapshot.getString(Constants.UserFields.GITHUB_USERNAME);
+                    final String defaultSound = documentSnapshot.getString(Constants.UserFields.DEFAULT_SOUND);
+                    final String defaultReminderFreq = documentSnapshot.getString(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY);
+                    final String appTheme = documentSnapshot.getString(Constants.UserFields.APP_THEME);
 
                     // Get events
                     db.collection(Constants.Collections.USERS).document(userId)
@@ -92,7 +95,8 @@ public class DayDetailActivity extends AppCompatActivity {
                                         }
 
                                         // Create user
-                                        User u = new User(email, gUsername, events);
+                                        User u = new User(email, gUsername, events,
+                                                defaultSound, defaultReminderFreq, appTheme);
                                         binding.dayDetailDateText.setText(u.toString());
                                     }
                                 }

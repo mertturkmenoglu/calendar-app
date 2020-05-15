@@ -82,6 +82,9 @@ public class RegisterActivity extends AppCompatActivity {
                             Map<String, Object> user = new HashMap<>();
                             user.put(Constants.UserFields.EMAIL, email);
                             user.put(Constants.UserFields.GITHUB_USERNAME, githubUsername);
+                            user.put(Constants.UserFields.DEFAULT_SOUND, Constants.DEFAULT_SOUND);
+                            user.put(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, Constants.DEFAULT_REMINDER_FREQUENCY);
+                            user.put(Constants.UserFields.APP_THEME, Constants.AppThemes.DARK);
 
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
