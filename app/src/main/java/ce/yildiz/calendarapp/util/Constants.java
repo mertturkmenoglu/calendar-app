@@ -21,6 +21,18 @@ public final class Constants {
         public static final String APP_THEME = "appTheme";
     }
 
+    public static final class EventFields {
+        public static final String DETAIL = "detail";
+        public static final String END_DATE = "endDate";
+        public static final String LOCATION = "location";
+        public static final String NAME = "name";
+        public static final String REMINDER_FREQ = "reminderFreq";
+        public static final String REMINDER_TYPE = "reminderType";
+        public static final String REMINDERS = "reminders";
+        public static final String START_DATE = "startDate";
+        public static final String TYPE = "type";
+    }
+
     public static final long ONE_MONTH_IN_MILLIS = 1000L * 60 * 60 * 24 * 30;
     public static final long ONE_WEEK_IN_MILLIS = 1000L * 60 * 60 * 24 * 7;
     public static final long ONE_DAY_IN_MILLIS = 1000L * 60 * 60 * 24;
