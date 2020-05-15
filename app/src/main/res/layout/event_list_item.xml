@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="2dp"
     android:background="@android:color/background_light"
     android:orientation="vertical">
@@ -13,12 +14,10 @@
         android:layout_height="wrap_content"
         android:background="@color/cardview_dark_background">
 
-        <LinearLayout
-            android:id="@+id/event_list_item_container"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/cardview_dark_background"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_dark_background">
 
             <TextView
                 android:id="@+id/event_list_item_name"
@@ -29,7 +28,9 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="NAME" />
+                tools:text="NAME"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/event_list_item_detail"
@@ -37,15 +38,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:textColor="@android:color/white"
-                tools:text="DETAIL" />
-
-            <TextView
-                android:id="@+id/event_list_item_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
-                android:textColor="@android:color/white"
-                tools:text="TYPE" />
+                tools:text="DETAIL"
+                app:layout_constraintTop_toBottomOf="@id/event_list_item_name"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/event_list_item_start_date"
@@ -53,16 +48,12 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:textColor="@android:color/white"
-                tools:text="START DATE" />
+                tools:text="START DATE"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/event_list_item_end_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
-                android:textColor="@android:color/white"
-                tools:text="END DATE" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

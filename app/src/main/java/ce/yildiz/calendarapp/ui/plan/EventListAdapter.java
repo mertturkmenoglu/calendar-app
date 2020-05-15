@@ -24,8 +24,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         TextView nameTV;
         TextView detailTV;
         TextView startDateTV;
-        TextView endDateTV;
-        TextView typeTV;
         RecyclerViewClickListener mListener;
 
         EventViewHolder(View view, RecyclerViewClickListener listener) {
@@ -36,8 +34,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             nameTV = view.findViewById(R.id.event_list_item_name);
             detailTV = view.findViewById(R.id.event_list_item_detail);
             startDateTV = view.findViewById(R.id.event_list_item_start_date);
-            endDateTV = view.findViewById(R.id.event_list_item_end_date);
-            typeTV = view.findViewById(R.id.event_list_item_type);
         }
 
         @Override
@@ -67,9 +63,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         Event event = mEvents.get(position);
         holder.nameTV.setText(event.getName());
         holder.detailTV.setText(event.getDetail());
-        holder.startDateTV.setText(event.getStartDate().toString());
-        holder.endDateTV.setText(event.getEndDate().toString());
-        holder.typeTV.setText(event.getType());
+        holder.startDateTV.setText(event.getStartDate().toGMTString());
     }
 
     @Override
