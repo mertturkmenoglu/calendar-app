@@ -83,6 +83,7 @@
     <string name="update_ok_message">Updated successfully</string>
     <string name="update_error_message">Updated failed</string>
     <string name="format_error_message">Wrong format</string>
+    <string name="share">Share</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>
