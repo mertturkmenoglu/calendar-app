@@ -1,7 +1,10 @@
 package ce.yildiz.calendarapp.ui.detail;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -40,6 +43,7 @@ import java.util.Map;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityEventDetailBinding;
 import ce.yildiz.calendarapp.model.Event;
+import ce.yildiz.calendarapp.services.NotificationAlertReceiver;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
 
@@ -327,6 +331,13 @@ public class EventDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        startNotification(
+                                startDateFinal,
+                                documentReference.getId().hashCode(),
+                                nameFinal,
+                                detailFinal
+                        );
+
                         Toast.makeText(EventDetailActivity.this,
                                 R.string.new_event_ok_message, Toast.LENGTH_SHORT).show();
                         finish();
@@ -340,6 +351,42 @@ public class EventDetailActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void startNotification(Date d, int requestCode, String title, String content) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationAlertReceiver.class);
+        intent.putExtra("title", title);
+        intent.putExtra("content", content);
+        intent.putExtra("icon", R.drawable.web_hi_res_512);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                intent,
+                0
+        );
+
+        if (d.getTime() <= Calendar.getInstance().getTimeInMillis() || alarmManager == null) {
+            return;
+        }
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, d.getTime(), pendingIntent);
+    }
+
+    private void cancelNotification(int requestCode) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationAlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                intent,
+                0
+        );
+
+        if (alarmManager == null) return;
+
+        alarmManager.cancel(pendingIntent);
     }
 
     private void update() {
@@ -551,10 +598,13 @@ public class EventDetailActivity extends AppCompatActivity {
                         if (snapshot == null) return;
 
                         for (QueryDocumentSnapshot documentSnapshot : snapshot) {
+                            final int requestCode = documentSnapshot.getId().hashCode();
+
                             documentSnapshot.getReference().delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            cancelNotification(requestCode);
                                             Toast.makeText(EventDetailActivity.this,
                                                     R.string.event_delete_ok_message, Toast.LENGTH_SHORT).show();
                                         }
