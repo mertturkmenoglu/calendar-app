@@ -27,7 +27,9 @@ import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
 import ce.yildiz.calendarapp.util.Constants;
 
 public class MonthlyPlanActivity extends AppCompatActivity {
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseFirestore db;
     private ActivityMonthlyPlanBinding binding;
 
@@ -84,7 +86,7 @@ public class MonthlyPlanActivity extends AppCompatActivity {
                                 }
                             };
 
-                            EventListAdapter adapter = new EventListAdapter(MonthlyPlanActivity.this,
+                            EventListAdapter adapter = new EventListAdapter(
                                     events, listener);
                             binding.monthlyRecyclerView.setAdapter(adapter);
 

@@ -2,6 +2,7 @@ package ce.yildiz.calendarapp.model;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class User {
     private String email;
     private String gUsername;
@@ -32,10 +33,12 @@ public class User {
         this.email = email;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public String getgUsername() {
         return gUsername;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public void setgUsername(String gUsername) {
         this.gUsername = gUsername;
     }

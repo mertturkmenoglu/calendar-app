@@ -28,7 +28,9 @@ import ce.yildiz.calendarapp.util.Constants;
 
 public class DailyPlanActivity extends AppCompatActivity {
     private ActivityDailyPlanBinding binding;
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseFirestore db;
 
     @Override
@@ -102,7 +104,7 @@ public class DailyPlanActivity extends AppCompatActivity {
                                 }
                             };
 
-                            EventListAdapter adapter = new EventListAdapter(DailyPlanActivity.this,
+                            EventListAdapter adapter = new EventListAdapter(
                                     events, listener);
                             binding.recyclerView.setAdapter(adapter);
 

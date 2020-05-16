@@ -28,7 +28,9 @@ import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.StringUtil;
 
 public class MainActivity extends AppCompatActivity {
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
 

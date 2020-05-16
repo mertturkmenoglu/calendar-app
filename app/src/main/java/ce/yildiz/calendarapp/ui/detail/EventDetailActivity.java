@@ -64,6 +64,7 @@ public class EventDetailActivity extends AppCompatActivity {
         if (i == null) return;
 
         String jsonString = i.getStringExtra("event");
+        final Locale locale = new Locale("tr", "TR");
 
         if (jsonString != null) {
             Event e = new Gson().fromJson(jsonString, Event.class);
@@ -75,8 +76,8 @@ public class EventDetailActivity extends AppCompatActivity {
             startDate = e.getStartDate();
             endDate = e.getEndDate();
 
-            binding.eventDetailStartDate.setText(e.getStartDate().toGMTString());
-            binding.eventDetailEndDate.setText(e.getEndDate().toGMTString());
+            binding.eventDetailStartDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(e.getStartDate()));
+            binding.eventDetailEndDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(e.getEndDate()));
 
             String location = e.getLocation().getLatitude() + "," + e.getLocation().getLongitude();
             binding.eventDetailLocation.setText(location);
@@ -155,7 +156,7 @@ public class EventDetailActivity extends AppCompatActivity {
                                 startDate.setYear(year - 1900);
                                 startDate.setMonth(monthOfYear);
                                 startDate.setDate(dayOfMonth);
-                                binding.eventDetailStartDate.setText(startDate.toGMTString());
+                                binding.eventDetailStartDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(startDate));
                             }
                         }, year, month, day);
                 datePickerDialog.show();
@@ -170,9 +171,9 @@ public class EventDetailActivity extends AppCompatActivity {
                                                   int minute) {
                                 startDate.setHours(hourOfDay);
                                 startDate.setMinutes(minute);
-                                binding.eventDetailStartDate.setText(startDate.toGMTString());
+                                binding.eventDetailStartDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(startDate));
                             }
-                        }, hour, minute, false);
+                        }, hour, minute, true);
                 timePickerDialog.show();
             }
         });
@@ -193,7 +194,7 @@ public class EventDetailActivity extends AppCompatActivity {
                                 endDate.setYear(year - 1900);
                                 endDate.setMonth(monthOfYear);
                                 endDate.setDate(dayOfMonth);
-                                binding.eventDetailEndDate.setText(endDate.toGMTString());
+                                binding.eventDetailEndDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(endDate));
                             }
                         }, year, month, day);
                 datePickerDialog.show();
@@ -208,7 +209,7 @@ public class EventDetailActivity extends AppCompatActivity {
                                                   int minute) {
                                 endDate.setHours(hourOfDay);
                                 endDate.setMinutes(minute);
-                                binding.eventDetailEndDate.setText(endDate.toGMTString());
+                                binding.eventDetailEndDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(endDate));
                             }
                         }, hour, minute, true);
                 timePickerDialog.show();

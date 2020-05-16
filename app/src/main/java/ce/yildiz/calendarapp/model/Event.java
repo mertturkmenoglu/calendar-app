@@ -5,6 +5,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Event {
     private String detail;
     private String name;

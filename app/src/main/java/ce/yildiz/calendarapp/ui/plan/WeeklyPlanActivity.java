@@ -27,7 +27,9 @@ import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
 import ce.yildiz.calendarapp.util.Constants;
 
 public class WeeklyPlanActivity extends AppCompatActivity {
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
+    @SuppressWarnings("FieldCanBeLocal")
     private FirebaseFirestore db;
     private ActivityWeeklyPlanBinding binding;
 
@@ -84,7 +86,7 @@ public class WeeklyPlanActivity extends AppCompatActivity {
                                 }
                             };
 
-                            EventListAdapter adapter = new EventListAdapter(WeeklyPlanActivity.this,
+                            EventListAdapter adapter = new EventListAdapter(
                                     events, listener);
                             binding.weeklyRecyclerView.setAdapter(adapter);
 

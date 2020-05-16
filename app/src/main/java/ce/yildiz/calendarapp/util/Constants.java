@@ -2,7 +2,9 @@ package ce.yildiz.calendarapp.util;
 
 public final class Constants {
     public static final int MIN_PASSWORD_LENGTH = 6;
+    @SuppressWarnings("WeakerAccess")
     public static final String IMAGE_BASE_URL = "https://github.com/";
+    @SuppressWarnings("WeakerAccess")
     public static final String IMAGE_EXTENSION = "png";
     public static final String DEFAULT_SOUND = "default_sound";
     public static final String DEFAULT_REMINDER_FREQUENCY = ReminderFrequencies.DAILY;
@@ -12,6 +14,7 @@ public final class Constants {
         public static final String USER_EVENTS = "Events";
     }
 
+    @SuppressWarnings("unused")
     public static final class UserFields {
         public static final String EMAIL = "email";
         public static final String GITHUB_USERNAME = "gUsername";
@@ -35,19 +38,23 @@ public final class Constants {
 
     public static final long ONE_MONTH_IN_MILLIS = 1000L * 60 * 60 * 24 * 30;
     public static final long ONE_WEEK_IN_MILLIS = 1000L * 60 * 60 * 24 * 7;
+    @SuppressWarnings("unused")
     public static final long ONE_DAY_IN_MILLIS = 1000L * 60 * 60 * 24;
 
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public static final class ReminderFrequencies {
         public static final String DAILY = "Daily";
         public static final String WEEKLY = "Weekly";
         public static final String MONTHLY = "Monthly";
     }
 
+    @SuppressWarnings("unused")
     public static final class ReminderTypes {
         public static final String VIBRATION = "Vibration";
         public static final String SOUND = "Sound";
     }
 
+    @SuppressWarnings("unused")
     public static final class AppThemes {
         public static final String DARK = "Dark";
         public static final String LIGHT = "Light";

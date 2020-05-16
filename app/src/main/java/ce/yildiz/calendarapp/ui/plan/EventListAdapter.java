@@ -1,6 +1,5 @@
 package ce.yildiz.calendarapp.ui.plan;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +8,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
 import ce.yildiz.calendarapp.model.Event;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventViewHolder> {
-    private final Context mContext;
-    private List<Event> mEvents;
-    private RecyclerViewClickListener mListener;
+    private final List<Event> mEvents;
+    private final RecyclerViewClickListener mListener;
 
     static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView nameTV;
-        TextView detailTV;
-        TextView startDateTV;
-        RecyclerViewClickListener mListener;
+        final TextView nameTV;
+        final TextView detailTV;
+        final TextView startDateTV;
+        final RecyclerViewClickListener mListener;
 
         EventViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
@@ -42,8 +42,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
     }
 
-    EventListAdapter(Context context, List<Event> events, RecyclerViewClickListener listener) {
-        this.mContext = context;
+    EventListAdapter(List<Event> events, RecyclerViewClickListener listener) {
         this.mEvents = events;
         this.mListener = listener;
     }
@@ -60,10 +59,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, final int position) {
+        final Locale locale = new Locale("tr", "TR");
         Event event = mEvents.get(position);
         holder.nameTV.setText(event.getName());
         holder.detailTV.setText(event.getDetail());
-        holder.startDateTV.setText(event.getStartDate().toGMTString());
+        holder.startDateTV.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(event.getStartDate()));
     }
 
     @Override
