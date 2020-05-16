@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
@@ -39,6 +40,7 @@ import java.util.Map;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityEventDetailBinding;
 import ce.yildiz.calendarapp.model.Event;
+import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
 
 @SuppressWarnings("deprecation")
@@ -231,6 +233,15 @@ public class EventDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 share();
+            }
+        });
+
+        binding.eventDetailDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (originalEventName != null) {
+                    delete();
+                }
             }
         });
     }
@@ -518,5 +529,49 @@ public class EventDetailActivity extends AppCompatActivity {
         shareIntent.setType("text/plain");
         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
         startActivity(shareIntent);
+    }
+
+    private void delete() {
+        db.collection(Constants.Collections.USERS)
+                .document(userId)
+                .collection(Constants.Collections.USER_EVENTS)
+                .whereEqualTo("name", originalEventName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(EventDetailActivity.this,
+                                    R.string.event_delete_error_message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        QuerySnapshot snapshot = task.getResult();
+
+                        if (snapshot == null) return;
+
+                        for (QueryDocumentSnapshot documentSnapshot : snapshot) {
+                            documentSnapshot.getReference().delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(EventDetailActivity.this,
+                                                    R.string.event_delete_ok_message, Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(EventDetailActivity.this,
+                                                    R.string.event_delete_error_message, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+        Intent mainIntent = new Intent(EventDetailActivity.this, MainActivity.class);
+        startActivity(mainIntent);
+        finish();
     }
 }
