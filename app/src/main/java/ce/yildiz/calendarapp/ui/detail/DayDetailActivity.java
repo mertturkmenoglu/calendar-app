@@ -24,6 +24,7 @@ import ce.yildiz.calendarapp.databinding.ActivityDayDetailBinding;
 import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.models.User;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.Validate;
 
 public class DayDetailActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
@@ -45,11 +46,11 @@ public class DayDetailActivity extends AppCompatActivity {
             return;
         }
 
-        final int year = incomingIntent.getIntExtra("year", 0);
-        final int month = incomingIntent.getIntExtra("month", 0);
-        final int day = incomingIntent.getIntExtra("day", 0);
+        final int year = incomingIntent.getIntExtra("year", Constants.DATE_DEFAULT_YEAR);
+        final int month = incomingIntent.getIntExtra("month", Constants.DATE_DEFAULT_MONTH);
+        final int day = incomingIntent.getIntExtra("day", Constants.DATE_DEFAULT_DAY);
 
-        if (year == 0 || month == -1 || day == 0) {
+        if (Validate.Date.validateFields(year, month, day)) {
             Toast.makeText(this, R.string.invalid_date, Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -90,6 +91,7 @@ public class DayDetailActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         QuerySnapshot result = task.getResult();
                                         if (result == null) return;
+
                                         ArrayList<Event> events = new ArrayList<>();
 
                                         for (QueryDocumentSnapshot d : result) {

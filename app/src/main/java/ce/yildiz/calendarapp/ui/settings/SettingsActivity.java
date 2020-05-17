@@ -60,9 +60,9 @@ public class SettingsActivity extends AppCompatActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot == null) return;
 
-                    final String appTheme = documentSnapshot.getString("appTheme");
-                    final String defaultReminderFreq = documentSnapshot.getString("defaultReminderFreq");
-                    final String defaultSound = documentSnapshot.getString("defaultSound");
+                    final String appTheme = documentSnapshot.getString(Constants.UserFields.APP_THEME);
+                    final String defaultReminderFreq = documentSnapshot.getString(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY);
+                    final String defaultSound = documentSnapshot.getString(Constants.UserFields.DEFAULT_SOUND);
 
                     binding.settingsDefaultSound.setText(defaultSound);
 

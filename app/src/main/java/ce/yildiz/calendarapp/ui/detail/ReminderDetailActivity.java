@@ -102,7 +102,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                mDate.setYear(year - 1900);
+                                mDate.setYear(year - Constants.DATE_YEAR_DIFF);
                                 mDate.setMonth(monthOfYear);
                                 mDate.setDate(dayOfMonth);
                                 String dateText = getString(R.string.date) + " "

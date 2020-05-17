@@ -32,6 +32,7 @@ public class PasswordResetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String email = binding.forgotPasswordLoginEt.getText().toString().trim();
+
                 mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

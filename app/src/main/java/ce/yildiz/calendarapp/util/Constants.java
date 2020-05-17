@@ -54,9 +54,14 @@ public final class Constants {
         public static final String SOUND = "Sound";
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "WeakerAccess"})
     public static final class AppThemes {
         public static final String DARK = "Dark";
         public static final String LIGHT = "Light";
     }
+
+    public static final int DATE_DEFAULT_YEAR = 0;
+    public static final int DATE_DEFAULT_MONTH = -1;
+    public static final int DATE_DEFAULT_DAY = 0;
+    public static final int DATE_YEAR_DIFF = 1900;
 }

@@ -171,7 +171,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                startDate.setYear(year - 1900);
+                                startDate.setYear(year - Constants.DATE_YEAR_DIFF);
                                 startDate.setMonth(monthOfYear);
                                 startDate.setDate(dayOfMonth);
                                 binding.eventDetailStartDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(startDate));
@@ -214,7 +214,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                endDate.setYear(year - 1900);
+                                endDate.setYear(year - Constants.DATE_YEAR_DIFF);
                                 endDate.setMonth(monthOfYear);
                                 endDate.setDate(dayOfMonth);
                                 binding.eventDetailEndDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(endDate));
@@ -590,11 +590,15 @@ public class EventDetailActivity extends AppCompatActivity {
         }
 
         Locale locale = new Locale("tr", "TR");
-        String message = "Event Name: " + nameFinal + "\n";
-        message += "Event Detail: " + detailFinal + "\n";
-        message += "Start Date: " + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(startDateFinal) + "\n";
-        message += "End Date: " + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(endDateFinal) + "\n";
-        message += "Location: [" + locationFinal.getLatitude() + ", " + locationFinal.getLongitude() + "]\n";
+        DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+        final String locationShareText =
+                "[" + locationFinal.getLatitude() + ", " + locationFinal.getLongitude() + "]";
+
+        String message = getString(R.string.event_share_event_name) + nameFinal + "\n";
+        message += getString(R.string.event_share_event_detail) + detailFinal + "\n";
+        message += getString(R.string.event_share_event_start_date) + df.format(startDateFinal) + "\n";
+        message += getString(R.string.event_share_event_end_date) + df.format(endDateFinal) + "\n";
+        message += getString(R.string.event_share_location) + locationShareText + "\n";
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
