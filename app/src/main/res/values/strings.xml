@@ -102,6 +102,9 @@
     <string name="reminder_delete_error_message">Reminder delete failed</string>
     <string name="change_date">Change Date</string>
     <string name="change_time">Change Time</string>
+    <string name="default_notification_title">CalendarEvent</string>
+    <string name="default_notification_content">There is an event soon</string>
+    <string name="invalid_date">Invalid date</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

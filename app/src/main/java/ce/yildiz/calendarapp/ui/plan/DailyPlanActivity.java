@@ -69,7 +69,7 @@ public class DailyPlanActivity extends AppCompatActivity {
         final int day = i.getIntExtra("day", 0);
 
         if (year == 0 || month == -1 || day == 0) {
-            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.invalid_date, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -78,6 +78,7 @@ public class DailyPlanActivity extends AppCompatActivity {
                 .collection(Constants.Collections.USER_EVENTS)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressWarnings("deprecation")
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {

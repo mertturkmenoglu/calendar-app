@@ -106,6 +106,7 @@ public class Event {
         this.type = type;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public String toString() {
         return "Event{" +

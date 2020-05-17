@@ -75,6 +75,7 @@ public class User {
         this.appTheme = appTheme;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

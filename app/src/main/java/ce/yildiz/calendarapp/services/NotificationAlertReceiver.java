@@ -11,8 +11,8 @@ import ce.yildiz.calendarapp.R;
 public class NotificationAlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String title = "CalendarEvent";
-        String content = "There is an event soon";
+        String title = context.getString(R.string.default_notification_title);
+        String content = context.getString(R.string.default_notification_content);
         int icon = R.drawable.web_hi_res_512;
 
         if (intent != null) {

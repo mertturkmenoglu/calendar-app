@@ -279,7 +279,7 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void openReminders() {
+    private void openReminders() {
         Intent reminderListIntent = new Intent(EventDetailActivity.this,
                 ReminderListActivity.class);
 

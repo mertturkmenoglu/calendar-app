@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent passwordResetIntent = new Intent(LoginActivity.this, PasswordResetActivity.class);
                 startActivity(passwordResetIntent);
-                finish();
             }
         });
 
@@ -58,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent signUpIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(signUpIntent);
-                finish();
             }
         });
 

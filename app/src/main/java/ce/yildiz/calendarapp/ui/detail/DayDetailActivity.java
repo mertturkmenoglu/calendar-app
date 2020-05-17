@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityDayDetailBinding;
 import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.model.User;
@@ -49,7 +50,7 @@ public class DayDetailActivity extends AppCompatActivity {
         final int day = incomingIntent.getIntExtra("day", 0);
 
         if (year == 0 || month == -1 || day == 0) {
-            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.invalid_date, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
