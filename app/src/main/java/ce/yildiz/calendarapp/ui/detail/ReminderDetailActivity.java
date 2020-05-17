@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -28,6 +29,7 @@ import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityReminderDetailBinding;
 import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class ReminderDetailActivity extends AppCompatActivity {
@@ -172,6 +174,31 @@ public class ReminderDetailActivity extends AppCompatActivity {
                             reminders.add(mDate);
 
                             s.getReference().update(Constants.EventFields.REMINDERS, reminders);
+
+                            NotificationUtil.startNotification(
+                                    ReminderDetailActivity.this,
+                                    mDate,
+                                    s.getId().hashCode(),
+                                    e.getName(),
+                                    e.getDetail()
+                            );
+
+                            if (e.getReminderType().equals(Constants.ReminderTypes.VIBRATION)) {
+                                NotificationUtil.startVibration(
+                                        ReminderDetailActivity.this,
+                                        mDate,
+                                        s.getId().hashCode()
+                                );
+                            } else if (e.getReminderType().equals(Constants.ReminderTypes.SOUND)) {
+                                NotificationUtil.startSound(
+                                        ReminderDetailActivity.this,
+                                        mDate,
+                                        s.getId().hashCode()
+                                );
+                            } else {
+                                Log.e(TAG, "Unknown reminder type");
+                            }
+
                             break;
                         }
 
@@ -257,6 +284,33 @@ public class ReminderDetailActivity extends AppCompatActivity {
                             }
 
                             s.getReference().update(Constants.EventFields.REMINDERS, reminders);
+                            final String reminderType = e.getReminderType();
+                            final int requestCode = s.getId().hashCode();
+
+                            NotificationUtil.cancelNotification(
+                                    ReminderDetailActivity.this,
+                                    requestCode
+                            );
+
+                            if (reminderType == null) {
+                                Log.e(TAG, "Reminder is null");
+                                return;
+                            }
+
+                            if (reminderType.equals(Constants.ReminderTypes.SOUND)) {
+                                NotificationUtil.cancelSound(
+                                        ReminderDetailActivity.this,
+                                        requestCode
+                                );
+                            } else if (reminderType.equals(Constants.ReminderTypes.VIBRATION)) {
+                                NotificationUtil.cancelVibration(
+                                        ReminderDetailActivity.this,
+                                        requestCode
+                                );
+                            } else {
+                                Log.e(TAG, "Unknown reminder type");
+                            }
+
                             break;
                         }
 
