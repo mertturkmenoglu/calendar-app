@@ -79,6 +79,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
                     + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(mDate);
             binding.reminderDetailDateText.setText(dateText);
 
+            @SuppressWarnings("deprecation")
             String time = getString(R.string.time) + " " + mDate.getHours() + ":" + mDate.getMinutes();
             binding.reminderDetailTimeText.setText(time);
         } else {
@@ -97,6 +98,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ReminderDetailActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
+                            @SuppressWarnings("deprecation")
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
@@ -119,9 +121,11 @@ public class ReminderDetailActivity extends AppCompatActivity {
                 final int hour = c.get(Calendar.HOUR_OF_DAY);
                 final int minute = c.get(Calendar.MINUTE);
 
+                @SuppressWarnings("deprecation")
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ReminderDetailActivity.this,
                         android.R.style.Theme_Holo_Dialog_NoActionBar,
                         new TimePickerDialog.OnTimeSetListener() {
+                            @SuppressWarnings("deprecation")
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 mDate.setHours(hourOfDay);
