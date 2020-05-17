@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityReminderDetailBinding;
-import ce.yildiz.calendarapp.model.Event;
+import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;

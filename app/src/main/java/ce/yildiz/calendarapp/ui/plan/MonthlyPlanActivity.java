@@ -23,9 +23,9 @@ import java.util.Date;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityMonthlyPlanBinding;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
-import ce.yildiz.calendarapp.model.Event;
-import ce.yildiz.calendarapp.ui.adapters.EventListAdapter;
+import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
+import ce.yildiz.calendarapp.ui.plan.adapters.EventListAdapter;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 

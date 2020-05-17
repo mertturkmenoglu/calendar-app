@@ -1,4 +1,4 @@
-package ce.yildiz.calendarapp.ui.adapters;
+package ce.yildiz.calendarapp.ui.reminder.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

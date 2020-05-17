@@ -40,7 +40,7 @@ import java.util.Map;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityEventDetailBinding;
-import ce.yildiz.calendarapp.model.Event;
+import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.ui.reminder.ReminderListActivity;
 import ce.yildiz.calendarapp.util.Constants;

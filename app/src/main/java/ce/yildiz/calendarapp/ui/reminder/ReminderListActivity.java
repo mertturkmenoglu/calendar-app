@@ -19,9 +19,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityReminderListBinding;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
-import ce.yildiz.calendarapp.model.Event;
-import ce.yildiz.calendarapp.ui.adapters.ReminderListAdapter;
+import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.ui.detail.ReminderDetailActivity;
+import ce.yildiz.calendarapp.ui.reminder.adapters.ReminderListAdapter;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 

@@ -1,4 +1,4 @@
-package ce.yildiz.calendarapp.model;
+package ce.yildiz.calendarapp.models;
 
 import java.util.List;
 

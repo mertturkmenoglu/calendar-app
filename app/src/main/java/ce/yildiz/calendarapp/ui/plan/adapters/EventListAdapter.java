@@ -1,4 +1,4 @@
-package ce.yildiz.calendarapp.ui.adapters;
+package ce.yildiz.calendarapp.ui.plan.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +14,7 @@ import java.util.Locale;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
-import ce.yildiz.calendarapp.model.Event;
+import ce.yildiz.calendarapp.models.Event;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventViewHolder> {
     private final List<Event> mEvents;

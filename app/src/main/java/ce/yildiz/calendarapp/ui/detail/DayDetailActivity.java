@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityDayDetailBinding;
-import ce.yildiz.calendarapp.model.Event;
-import ce.yildiz.calendarapp.model.User;
+import ce.yildiz.calendarapp.models.Event;
+import ce.yildiz.calendarapp.models.User;
 import ce.yildiz.calendarapp.util.Constants;
 
 public class DayDetailActivity extends AppCompatActivity {
