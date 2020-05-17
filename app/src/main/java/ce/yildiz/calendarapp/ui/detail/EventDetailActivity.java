@@ -177,7 +177,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 final int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(EventDetailActivity.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(EventDetailActivity.this, android.R.style.Theme_Holo_Dialog_NoActionBar,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
@@ -187,6 +187,11 @@ public class EventDetailActivity extends AppCompatActivity {
                                 binding.eventDetailStartDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(startDate));
                             }
                         }, hour, minute, true);
+
+                if (timePickerDialog.getWindow() != null) {
+                    timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
                 timePickerDialog.show();
             }
         });
@@ -215,7 +220,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 final int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(EventDetailActivity.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(EventDetailActivity.this, android.R.style.Theme_Holo_Dialog_NoActionBar,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
@@ -225,6 +230,11 @@ public class EventDetailActivity extends AppCompatActivity {
                                 binding.eventDetailEndDate.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(endDate));
                             }
                         }, hour, minute, true);
+
+                if (timePickerDialog.getWindow() != null) {
+                    timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
                 timePickerDialog.show();
             }
         });
