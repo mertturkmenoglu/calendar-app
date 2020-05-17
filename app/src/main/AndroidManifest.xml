@@ -3,6 +3,7 @@
     package="ce.yildiz.calendarapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +34,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <receiver android:name=".services.NotificationAlertReceiver" />
+        <receiver android:name=".services.SoundAlertReceiver" />
+        <receiver android:name=".services.VibrationAlertReceiver" />
     </application>
 
 </manifest>

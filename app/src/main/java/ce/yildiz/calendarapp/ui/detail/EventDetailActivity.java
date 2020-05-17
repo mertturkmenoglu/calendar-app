@@ -1,13 +1,11 @@
 package ce.yildiz.calendarapp.ui.detail;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -43,12 +41,14 @@ import java.util.Map;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityEventDetailBinding;
 import ce.yildiz.calendarapp.model.Event;
-import ce.yildiz.calendarapp.services.NotificationAlertReceiver;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.NotificationUtil;
 
 @SuppressWarnings("deprecation")
 public class EventDetailActivity extends AppCompatActivity {
+    private static final String TAG = EventDetailActivity.class.getSimpleName();
+
     private ActivityEventDetailBinding binding;
     private Date startDate;
     private Date endDate;
@@ -331,12 +331,29 @@ public class EventDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        startNotification(
+                        NotificationUtil.startNotification(
+                                EventDetailActivity.this,
                                 startDateFinal,
                                 documentReference.getId().hashCode(),
                                 nameFinal,
                                 detailFinal
                         );
+
+                        if (reminderTypeFinal.equals(Constants.ReminderTypes.SOUND)) {
+                            NotificationUtil.startSound(
+                                    EventDetailActivity.this,
+                                    startDateFinal,
+                                    documentReference.getId().hashCode()
+                            );
+                        } else if (reminderTypeFinal.equals(Constants.ReminderTypes.VIBRATION)) {
+                            NotificationUtil.startVibration(
+                                    EventDetailActivity.this,
+                                    startDateFinal,
+                                    documentReference.getId().hashCode()
+                            );
+                        } else {
+                            Log.e(TAG, "Unknown reminder type");
+                        }
 
                         Toast.makeText(EventDetailActivity.this,
                                 R.string.new_event_ok_message, Toast.LENGTH_SHORT).show();
@@ -351,42 +368,6 @@ public class EventDetailActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    private void startNotification(Date d, int requestCode, String title, String content) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, NotificationAlertReceiver.class);
-        intent.putExtra("title", title);
-        intent.putExtra("content", content);
-        intent.putExtra("icon", R.drawable.web_hi_res_512);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,
-                requestCode,
-                intent,
-                0
-        );
-
-        if (d.getTime() <= Calendar.getInstance().getTimeInMillis() || alarmManager == null) {
-            return;
-        }
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, d.getTime(), pendingIntent);
-    }
-
-    private void cancelNotification(int requestCode) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, NotificationAlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,
-                requestCode,
-                intent,
-                0
-        );
-
-        if (alarmManager == null) return;
-
-        alarmManager.cancel(pendingIntent);
     }
 
     private void update() {
@@ -599,14 +580,38 @@ public class EventDetailActivity extends AppCompatActivity {
 
                         for (QueryDocumentSnapshot documentSnapshot : snapshot) {
                             final int requestCode = documentSnapshot.getId().hashCode();
+                            final String reminderType = documentSnapshot.getString(Constants.EventFields.REMINDER_TYPE);
 
                             documentSnapshot.getReference().delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            cancelNotification(requestCode);
                                             Toast.makeText(EventDetailActivity.this,
                                                     R.string.event_delete_ok_message, Toast.LENGTH_SHORT).show();
+
+                                            NotificationUtil.cancelNotification(
+                                                    EventDetailActivity.this,
+                                                    requestCode
+                                            );
+
+                                            if (reminderType == null) {
+                                                Log.e(TAG, "Reminder is null");
+                                                return;
+                                            }
+
+                                            if (reminderType.equals(Constants.ReminderTypes.SOUND)) {
+                                                NotificationUtil.cancelSound(
+                                                        EventDetailActivity.this,
+                                                        requestCode
+                                                );
+                                            } else if (reminderType.equals(Constants.ReminderTypes.VIBRATION)) {
+                                                NotificationUtil.cancelVibration(
+                                                        EventDetailActivity.this,
+                                                        requestCode
+                                                );
+                                            } else {
+                                                Log.e(TAG, "Unknown reminder type");
+                                            }
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
