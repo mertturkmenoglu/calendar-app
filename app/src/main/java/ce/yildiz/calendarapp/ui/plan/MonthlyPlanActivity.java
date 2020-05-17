@@ -20,11 +20,13 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityMonthlyPlanBinding;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
 import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class MonthlyPlanActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
@@ -35,6 +37,12 @@ public class MonthlyPlanActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         binding = ActivityMonthlyPlanBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();

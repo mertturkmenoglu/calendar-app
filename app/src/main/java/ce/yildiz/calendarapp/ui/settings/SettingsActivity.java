@@ -1,5 +1,6 @@
 package ce.yildiz.calendarapp.ui.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,7 +20,9 @@ import java.util.List;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivitySettingsBinding;
+import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class SettingsActivity extends AppCompatActivity {
     private ActivitySettingsBinding binding;
@@ -29,6 +32,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
@@ -96,8 +105,18 @@ public class SettingsActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        SharedPreferencesUtil.saveApplicationTheme(
+                                                SettingsActivity.this,
+                                                userId,
+                                                appThemeLast
+                                        );
                                         Toast.makeText(SettingsActivity.this,
                                                 R.string.update_ok_message, Toast.LENGTH_SHORT).show();
+
+                                        Intent mainIntent = new Intent(SettingsActivity.this,
+                                                MainActivity.class);
+                                        startActivity(mainIntent);
+                                        finish();
                                     } else {
                                         Toast.makeText(SettingsActivity.this,
                                                 R.string.update_error_message, Toast.LENGTH_SHORT).show();

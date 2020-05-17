@@ -20,11 +20,13 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityDailyPlanBinding;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
 import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class DailyPlanActivity extends AppCompatActivity {
     private ActivityDailyPlanBinding binding;
@@ -35,6 +37,12 @@ public class DailyPlanActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         binding = ActivityDailyPlanBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();

@@ -25,6 +25,7 @@ import ce.yildiz.calendarapp.ui.plan.MonthlyPlanActivity;
 import ce.yildiz.calendarapp.ui.plan.WeeklyPlanActivity;
 import ce.yildiz.calendarapp.ui.settings.SettingsActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 import ce.yildiz.calendarapp.util.StringUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
@@ -105,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(settingsIntent);
+                finish();
             }
         });
 

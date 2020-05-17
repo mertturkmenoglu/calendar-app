@@ -20,6 +20,7 @@ import ce.yildiz.calendarapp.databinding.ActivityLoginBinding;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.ui.register.RegisterActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
@@ -36,9 +37,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if user is logged in
         if (mAuth.getCurrentUser() != null) {
+            SharedPreferencesUtil.loadApplicationTheme(this, mAuth.getCurrentUser().getUid());
             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(mainIntent);
             finish();
+            return;
         }
 
         binding.loginForgotPasswordText.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +87,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
+                            SharedPreferencesUtil.loadApplicationTheme(LoginActivity.this, mAuth.getCurrentUser().getUid());
                             Toast.makeText(LoginActivity.this, R.string.login_ok_message, Toast.LENGTH_SHORT).show();
+
                             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(mainIntent);
                         } else {

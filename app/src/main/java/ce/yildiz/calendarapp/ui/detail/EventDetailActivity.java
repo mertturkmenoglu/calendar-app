@@ -44,6 +44,7 @@ import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.NotificationUtil;
+import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 @SuppressWarnings("deprecation")
 public class EventDetailActivity extends AppCompatActivity {
@@ -60,6 +61,12 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         binding = ActivityEventDetailBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
