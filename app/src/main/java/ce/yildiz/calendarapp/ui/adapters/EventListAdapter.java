@@ -1,4 +1,4 @@
-package ce.yildiz.calendarapp.ui.plan;
+package ce.yildiz.calendarapp.ui.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private final List<Event> mEvents;
     private final RecyclerViewClickListener mListener;
 
-    static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView nameTV;
         final TextView detailTV;
         final TextView startDateTV;
@@ -42,7 +42,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
     }
 
-    EventListAdapter(List<Event> events, RecyclerViewClickListener listener) {
+    public EventListAdapter(List<Event> events, RecyclerViewClickListener listener) {
         this.mEvents = events;
         this.mListener = listener;
     }

@@ -90,6 +90,10 @@
     <string name="event_delete_ok_message">Event deleted</string>
     <string name="event_delete_error_message">Event delete failed</string>
     <string name="reminders">Reminders</string>
+    <string name="event_name_required">Event name is required</string>
+    <string name="new_reminder">New Reminder</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

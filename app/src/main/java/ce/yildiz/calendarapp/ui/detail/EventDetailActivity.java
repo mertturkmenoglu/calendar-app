@@ -42,6 +42,7 @@ import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityEventDetailBinding;
 import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
+import ce.yildiz.calendarapp.ui.reminder.ReminderListActivity;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
@@ -61,7 +62,11 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
+        String t = SharedPreferencesUtil.getTheme();
+
+        if (t == null) {
+            setTheme(R.style.AppTheme);
+        } else if (t.equals(Constants.AppThemes.DARK)) {
             setTheme(R.style.DarkTheme);
         } else {
             setTheme(R.style.AppTheme);
@@ -239,6 +244,13 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         });
 
+        binding.eventDetailRemindersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openReminders();
+            }
+        });
+
         binding.eventDetailSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,6 +277,20 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void openReminders() {
+        Intent reminderListIntent = new Intent(EventDetailActivity.this,
+                ReminderListActivity.class);
+
+        if (originalEventName == null) {
+            binding.eventDetailEventName.setError(getString(R.string.event_name_required));
+            binding.eventDetailEventName.requestFocus();
+            return;
+        }
+
+        reminderListIntent.putExtra("name", originalEventName);
+        startActivity(reminderListIntent);
     }
 
     private void save() {
