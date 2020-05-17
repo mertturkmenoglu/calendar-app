@@ -94,6 +94,14 @@
     <string name="new_reminder">New Reminder</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
+    <string name="reminder_add_error_message">Cannot add reminder</string>
+    <string name="reminder_add_ok_message">Reminder added</string>
+    <string name="reminder_update_ok_message">Reminder updated</string>
+    <string name="reminder_update_error_message">Reminder update failed</string>
+    <string name="reminder_delete_ok_message">Reminder deleted</string>
+    <string name="reminder_delete_error_message">Reminder delete failed</string>
+    <string name="change_date">Change Date</string>
+    <string name="change_time">Change Time</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

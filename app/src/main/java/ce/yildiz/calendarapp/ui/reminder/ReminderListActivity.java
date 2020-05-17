@@ -67,7 +67,9 @@ public class ReminderListActivity extends AppCompatActivity {
 
         if (name == null) return;
 
-        db.collection(Constants.Collections.USERS).document(mAuth.getCurrentUser().getUid())
+        final String userId = mAuth.getCurrentUser().getUid();
+
+        db.collection(Constants.Collections.USERS).document(userId)
                 .collection(Constants.Collections.USER_EVENTS)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -96,8 +98,12 @@ public class ReminderListActivity extends AppCompatActivity {
                                 public void onClick(View view, int position) {
                                     Intent reminderDetailIntent = new Intent(ReminderListActivity.this,
                                             ReminderDetailActivity.class);
+
                                     reminderDetailIntent.putExtra("reminder",
                                             mEvent.getReminders().get(position).getTime());
+
+                                    reminderDetailIntent.putExtra("name", name);
+                                    reminderDetailIntent.putExtra("userId", userId);
 
                                     startActivity(reminderDetailIntent);
                                 }
@@ -123,6 +129,9 @@ public class ReminderListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent reminderDetailIntent = new Intent(ReminderListActivity.this,
                         ReminderDetailActivity.class);
+
+                reminderDetailIntent.putExtra("name", name);
+                reminderDetailIntent.putExtra("userId", userId);
 
                 startActivity(reminderDetailIntent);
                 finish();

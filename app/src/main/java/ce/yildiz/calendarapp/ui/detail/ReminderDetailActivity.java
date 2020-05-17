@@ -4,20 +4,29 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityReminderDetailBinding;
+import ce.yildiz.calendarapp.model.Event;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
@@ -27,6 +36,10 @@ public class ReminderDetailActivity extends AppCompatActivity {
     private ActivityReminderDetailBinding binding;
     private Date mDate;
     private Date mOriginalDate;
+
+    private FirebaseFirestore db;
+    private String userId;
+    private String eventName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +53,6 @@ public class ReminderDetailActivity extends AppCompatActivity {
             setTheme(R.style.AppTheme);
         }
 
-
         super.onCreate(savedInstanceState);
         binding = ActivityReminderDetailBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
@@ -51,23 +63,28 @@ public class ReminderDetailActivity extends AppCompatActivity {
         if (i == null) return;
 
         long timeLong = i.getLongExtra("reminder", -1);
+        eventName = i.getStringExtra("name");
+        userId = i.getStringExtra("userId");
         final Locale locale = new Locale("tr", "TR");
+
+        if (eventName == null || userId == null) return;
 
         if (timeLong != -1) {
             mDate = new Date(timeLong);
             mOriginalDate = new Date(timeLong);
 
-            binding.reminderDetailDate.setText(
-                    DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(mDate)
-            );
+            String dateText = getString(R.string.date) + " "
+                    + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(mDate);
+            binding.reminderDetailDateText.setText(dateText);
 
-            String time = "" + mDate.getHours() + ":" + mDate.getMinutes();
-            binding.reminderDetailTime.setText(time);
+            String time = getString(R.string.time) + " " + mDate.getHours() + ":" + mDate.getMinutes();
+            binding.reminderDetailTimeText.setText(time);
         } else {
             mDate = new Date();
         }
 
-        binding.reminderDetailDate.setFocusable(false);
+        db = FirebaseFirestore.getInstance();
+
         binding.reminderDetailDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,16 +101,15 @@ public class ReminderDetailActivity extends AppCompatActivity {
                                 mDate.setYear(year - 1900);
                                 mDate.setMonth(monthOfYear);
                                 mDate.setDate(dayOfMonth);
-                                binding.reminderDetailDate.setText(
-                                        DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(mDate)
-                                );
+                                String dateText = getString(R.string.date) + " "
+                                        + DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(mDate);
+                                binding.reminderDetailDateText.setText(dateText);
                             }
                         }, year, month, day);
                 datePickerDialog.show();
             }
         });
 
-        binding.reminderDetailTime.setFocusable(false);
         binding.reminderDetailTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,8 +124,8 @@ public class ReminderDetailActivity extends AppCompatActivity {
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 mDate.setHours(hourOfDay);
                                 mDate.setMinutes(minute);
-                                String time = "" + hourOfDay + ":" + minute;
-                                binding.reminderDetailTime.setText(time);
+                                String time = getString(R.string.time) + " " + hourOfDay + ":" + minute;
+                                binding.reminderDetailTimeText.setText(time);
                             }
                         }, hour, minute, true);
 
@@ -124,7 +140,11 @@ public class ReminderDetailActivity extends AppCompatActivity {
         binding.reminderDetailSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (mOriginalDate == null) {
+                    save();
+                } else {
+                    update();
+                }
             }
         });
 
@@ -132,9 +152,124 @@ public class ReminderDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mOriginalDate != null) {
-                    Log.d(TAG, "onClick() called with: v = [" + v + "]");
+                    delete();
                 }
             }
         });
+    }
+
+    private void save() {
+        db.collection(Constants.Collections.USERS)
+                .document(userId)
+                .collection(Constants.Collections.USER_EVENTS)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot s : queryDocumentSnapshots) {
+                            Event e = s.toObject(Event.class);
+                            ArrayList<Date> reminders = new ArrayList<>(e.getReminders());
+                            reminders.add(mDate);
+
+                            s.getReference().update(Constants.EventFields.REMINDERS, reminders);
+                            break;
+                        }
+
+                        Toast.makeText(ReminderDetailActivity.this,
+                                R.string.reminder_add_ok_message, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ReminderDetailActivity.this,
+                                R.string.reminder_add_error_message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void update() {
+        db.collection(Constants.Collections.USERS).document(userId)
+                .collection(Constants.Collections.USER_EVENTS)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot s : queryDocumentSnapshots) {
+                            Event e = s.toObject(Event.class);
+
+                            if (e.getName().equals(eventName)) {
+                                ArrayList<Date> reminders = new ArrayList<>(e.getReminders());
+
+                                for (Date d : reminders) {
+                                    if (d.equals(mOriginalDate)) {
+                                        reminders.remove(d);
+                                        break;
+                                    }
+                                }
+
+                                reminders.add(mDate);
+                                s.getReference().update(Constants.EventFields.REMINDERS, reminders)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(ReminderDetailActivity.this,
+                                                        R.string.reminder_update_ok_message, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(ReminderDetailActivity.this,
+                                                        R.string.reminder_update_error_message, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ReminderDetailActivity.this,
+                                R.string.reminder_update_error_message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void delete() {
+        db.collection(Constants.Collections.USERS)
+                .document(userId)
+                .collection(Constants.Collections.USER_EVENTS)
+                .whereEqualTo("name", eventName)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot s : queryDocumentSnapshots) {
+                            Event e = s.toObject(Event.class);
+                            ArrayList<Date> reminders = new ArrayList<>(e.getReminders());
+
+                            for (Date d : reminders) {
+                                if (d.equals(mDate)) {
+                                    reminders.remove(d);
+                                    break;
+                                }
+                            }
+
+                            s.getReference().update(Constants.EventFields.REMINDERS, reminders);
+                            break;
+                        }
+
+                        Toast.makeText(ReminderDetailActivity.this,
+                                R.string.reminder_delete_ok_message, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ReminderDetailActivity.this,
+                                R.string.reminder_delete_error_message, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
