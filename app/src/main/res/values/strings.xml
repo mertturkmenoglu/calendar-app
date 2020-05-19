@@ -110,6 +110,9 @@
     <string name="event_share_event_start_date">\"Start Date: \"</string>
     <string name="event_share_event_end_date">\"End Date: \"</string>
     <string name="event_share_location">\"Location: \"</string>
+    <string name="splash_footer_text">Yildiz Calendar App © 2020</string>
+    <string name="splash_before_logo_text">We are the knights who say Ni!</string>
+    <string name="splash_after_logo_text">Best calendar app ever!</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

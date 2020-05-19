@@ -8,6 +8,7 @@ public final class Constants {
     public static final String IMAGE_EXTENSION = "png";
     public static final String DEFAULT_SOUND = "default_sound";
     public static final String DEFAULT_REMINDER_FREQUENCY = ReminderFrequencies.DAILY;
+    public static final int SPLASH_SCREEN_TIMEOUT_MILLIS = 1000;
 
     public static final class Collections {
         public static final String USERS = "Users";
