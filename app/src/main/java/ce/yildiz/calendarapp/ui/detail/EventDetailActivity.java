@@ -1,9 +1,16 @@
 package ce.yildiz.calendarapp.ui.detail;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +21,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -60,6 +73,8 @@ public class EventDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String userId;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String t = SharedPreferencesUtil.getTheme();
@@ -80,6 +95,8 @@ public class EventDetailActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         if (i == null) return;
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         String jsonString = i.getStringExtra("event");
         final Locale locale = new Locale("tr", "TR");
@@ -244,6 +261,13 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         });
 
+        binding.eventDetailLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocation();
+            }
+        });
+
         binding.eventDetailRemindersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -374,12 +398,13 @@ public class EventDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        NotificationUtil.startNotification(
+                        NotificationUtil.startRepeatingNotification(
                                 EventDetailActivity.this,
                                 startDateFinal,
                                 documentReference.getId().hashCode(),
                                 nameFinal,
-                                detailFinal
+                                detailFinal,
+                                reminderFreqFinal
                         );
 
                         if (reminderTypeFinal.equals(Constants.ReminderTypes.SOUND)) {
@@ -636,7 +661,7 @@ public class EventDetailActivity extends AppCompatActivity {
                                             Toast.makeText(EventDetailActivity.this,
                                                     R.string.event_delete_ok_message, Toast.LENGTH_SHORT).show();
 
-                                            NotificationUtil.cancelNotification(
+                                            NotificationUtil.cancelRepeatingNotification(
                                                     EventDetailActivity.this,
                                                     requestCode
                                             );
@@ -675,5 +700,97 @@ public class EventDetailActivity extends AppCompatActivity {
         Intent mainIntent = new Intent(EventDetailActivity.this, MainActivity.class);
         startActivity(mainIntent);
         finish();
+    }
+
+    private void getLocation() {
+        if (!checkLocationPermissions()) {
+            requestLocationPermissions();
+            return;
+        }
+
+        if (!isLocationEnabled()) {
+            Intent locationEnableIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(locationEnableIntent);
+            return;
+        }
+
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(
+                new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+
+                        if (location == null) {
+                            requestLocation();
+                            return;
+                        }
+
+                        final String locationText = location.getLatitude() + ","
+                                + location.getLongitude();
+                        binding.eventDetailLocation.setText(locationText);
+                    }
+                }
+        );
+    }
+
+    private boolean checkLocationPermissions() {
+        int hasAccessFineLocation = ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        int hasAccessCoarseLocation = ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        return (hasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED)
+                && (hasAccessFineLocation == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager == null) return false;
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    private void requestLocation() {
+        LocationRequest req = new LocationRequest();
+        req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        req.setInterval(0);
+        req.setFastestInterval(0);
+        req.setNumUpdates(1);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(
+                req,
+                new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+
+                    }
+                },
+                Looper.myLooper()
+        );
+    }
+
+    private void requestLocationPermissions() {
+        String[] permissions = new String[] {
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+
+        ActivityCompat.requestPermissions(this, permissions, Constants.PERMISSION_ID);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == Constants.PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+            }
+        }
     }
 }

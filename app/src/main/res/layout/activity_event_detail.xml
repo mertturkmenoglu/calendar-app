@@ -34,6 +34,7 @@
             android:autofillHints=""
             android:background="@drawable/rounded_edit_text_shape"
             android:ems="14"
+            android:hint="@string/event_name"
             android:fontFamily="@font/montserrat"
             android:inputType="text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -68,6 +69,7 @@
             android:layout_height="44dp"
             android:alpha="0.90"
             android:autofillHints=""
+            android:hint="@string/event_detail"
             android:background="@drawable/rounded_edit_text_shape"
             android:ems="14"
             android:fontFamily="@font/montserrat"
@@ -194,6 +196,7 @@
             android:layout_height="44dp"
             android:alpha="0.90"
             android:autofillHints=""
+            android:hint="@string/location"
             android:background="@drawable/rounded_edit_text_shape"
             android:ems="14"
             android:fontFamily="@font/montserrat"
@@ -208,6 +211,16 @@
             app:layout_constraintStart_toStartOf="@id/event_detail_location_text"
             app:layout_constraintTop_toBottomOf="@id/event_detail_location_text"
             tools:text="LOCATION" />
+
+        <Button
+            android:id="@+id/event_detail_location_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_place_accent_48dp"
+            app:layout_constraintBottom_toBottomOf="@id/event_detail_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/event_detail_location"
+            app:layout_constraintTop_toTopOf="@id/event_detail_location" />
 
         <TextView
             android:id="@+id/event_detail_reminder_freq_text"
@@ -280,6 +293,7 @@
             android:layout_height="44dp"
             android:alpha="0.90"
             android:autofillHints=""
+            android:hint="@string/event_type"
             android:background="@drawable/rounded_edit_text_shape"
             android:ems="14"
             android:fontFamily="@font/montserrat"

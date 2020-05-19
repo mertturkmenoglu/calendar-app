@@ -179,12 +179,13 @@ public class ReminderDetailActivity extends AppCompatActivity {
 
                             s.getReference().update(Constants.EventFields.REMINDERS, reminders);
 
-                            NotificationUtil.startNotification(
+                            NotificationUtil.startRepeatingNotification(
                                     ReminderDetailActivity.this,
                                     mDate,
                                     s.getId().hashCode(),
                                     e.getName(),
-                                    e.getDetail()
+                                    e.getDetail(),
+                                    e.getReminderFreq()
                             );
 
                             if (e.getReminderType().equals(Constants.ReminderTypes.VIBRATION)) {
@@ -291,7 +292,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
                             final String reminderType = e.getReminderType();
                             final int requestCode = s.getId().hashCode();
 
-                            NotificationUtil.cancelNotification(
+                            NotificationUtil.cancelRepeatingNotification(
                                     ReminderDetailActivity.this,
                                     requestCode
                             );
