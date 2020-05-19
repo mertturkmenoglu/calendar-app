@@ -1,12 +1,16 @@
 package ce.yildiz.calendarapp.ui.settings;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,10 +29,12 @@ import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class SettingsActivity extends AppCompatActivity {
+    public static final int RINGTONE_REQUEST_CODE = 10;
     private ActivitySettingsBinding binding;
     @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
             return;
         }
 
-        final String userId = mAuth.getCurrentUser().getUid();
+        userId = mAuth.getCurrentUser().getUid();
 
         db.collection(Constants.Collections.USERS).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -60,74 +66,118 @@ public class SettingsActivity extends AppCompatActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot == null) return;
 
-                    final String appTheme = documentSnapshot.getString(Constants.UserFields.APP_THEME);
-                    final String defaultReminderFreq = documentSnapshot.getString(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY);
-                    final String defaultSound = documentSnapshot.getString(Constants.UserFields.DEFAULT_SOUND);
-
-                    binding.settingsDefaultSound.setText(defaultSound);
-
-                    ArrayAdapter<CharSequence> reminderFreqAdapter = ArrayAdapter.createFromResource(
-                            SettingsActivity.this,
-                            R.array.reminder_freq,
-                            android.R.layout.simple_spinner_item
-                    );
-
-                    reminderFreqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.settingsDefaultReminderFrequencySpinner.setAdapter(reminderFreqAdapter);
-
-                    List<String> freqChoices = Arrays.asList(getResources().getStringArray(R.array.reminder_freq));
-                    binding.settingsDefaultReminderFrequencySpinner.setSelection(freqChoices.indexOf(defaultReminderFreq));
-
-                    ArrayAdapter<CharSequence> appThemeAdapter = ArrayAdapter.createFromResource(
-                            SettingsActivity.this,
-                            R.array.app_theme,
-                            android.R.layout.simple_spinner_item
-                    );
-
-                    appThemeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.settingsAppThemeSpinner.setAdapter(appThemeAdapter);
-
-                    List<String> themeChoices = Arrays.asList(getResources().getStringArray(R.array.app_theme));
-                    binding.settingsAppThemeSpinner.setSelection(themeChoices.indexOf(appTheme));
-
-                    binding.settingsSaveButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final String appThemeLast = (String) binding.settingsAppThemeSpinner.getSelectedItem();
-                            final String freqLast = (String) binding.settingsDefaultReminderFrequencySpinner.getSelectedItem();
-                            final String soundLast = binding.settingsDefaultSound.getText().toString().trim();
-
-                            db.collection(Constants.Collections.USERS).document(userId).update(
-                                Constants.UserFields.APP_THEME, appThemeLast,
-                                    Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, freqLast,
-                                    Constants.UserFields.DEFAULT_SOUND, soundLast
-                            ).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        SharedPreferencesUtil.saveApplicationTheme(
-                                                SettingsActivity.this,
-                                                userId,
-                                                appThemeLast
-                                        );
-                                        Toast.makeText(SettingsActivity.this,
-                                                R.string.update_ok_message, Toast.LENGTH_SHORT).show();
-
-                                        Intent mainIntent = new Intent(SettingsActivity.this,
-                                                MainActivity.class);
-                                        startActivity(mainIntent);
-                                        finish();
-                                    } else {
-                                        Toast.makeText(SettingsActivity.this,
-                                                R.string.update_error_message, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        }
-                    });
+                    setContents(documentSnapshot);
                 } else {
                     Toast.makeText(SettingsActivity.this,
                             R.string.login_error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void setContents(final DocumentSnapshot documentSnapshot) {
+        final String appTheme = documentSnapshot.getString(Constants.UserFields.APP_THEME);
+        final String defaultReminderFreq = documentSnapshot.getString(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY);
+        final String defaultSound = documentSnapshot.getString(Constants.UserFields.DEFAULT_SOUND);
+
+        binding.settingsDefaultSound.setText(defaultSound);
+
+        ArrayAdapter<CharSequence> reminderFreqAdapter = ArrayAdapter.createFromResource(
+                SettingsActivity.this,
+                R.array.reminder_freq,
+                android.R.layout.simple_spinner_item
+        );
+
+        reminderFreqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.settingsDefaultReminderFrequencySpinner.setAdapter(reminderFreqAdapter);
+
+        List<String> freqChoices = Arrays.asList(getResources().getStringArray(R.array.reminder_freq));
+        binding.settingsDefaultReminderFrequencySpinner.setSelection(freqChoices.indexOf(defaultReminderFreq));
+
+        ArrayAdapter<CharSequence> appThemeAdapter = ArrayAdapter.createFromResource(
+                SettingsActivity.this,
+                R.array.app_theme,
+                android.R.layout.simple_spinner_item
+        );
+
+        appThemeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.settingsAppThemeSpinner.setAdapter(appThemeAdapter);
+
+        List<String> themeChoices = Arrays.asList(getResources().getStringArray(R.array.app_theme));
+        binding.settingsAppThemeSpinner.setSelection(themeChoices.indexOf(appTheme));
+
+        binding.settingsSoundButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseSound();
+            }
+        });
+
+        binding.settingsSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+    }
+
+    private void chooseSound() {
+        String soundText = binding.settingsDefaultSound.getText().toString().trim();
+        Uri soundUri = Uri.parse(soundText);
+
+        Intent i = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        i.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+        i.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.select_sound_message));
+        i.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, soundUri);
+
+        startActivityForResult(i, RINGTONE_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data == null) return;
+
+        if (resultCode == Activity.RESULT_OK && requestCode == RINGTONE_REQUEST_CODE) {
+            Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+
+            if (uri != null) {
+                binding.settingsDefaultSound.setText(uri.toString());
+            } else {
+                binding.settingsDefaultSound.setText(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
+            }
+        }
+    }
+
+    private void save() {
+        final String appThemeLast = (String) binding.settingsAppThemeSpinner.getSelectedItem();
+        final String freqLast = (String) binding.settingsDefaultReminderFrequencySpinner.getSelectedItem();
+        final String soundLast = binding.settingsDefaultSound.getText().toString().trim();
+
+        db.collection(Constants.Collections.USERS).document(userId).update(
+                Constants.UserFields.APP_THEME, appThemeLast,
+                Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, freqLast,
+                Constants.UserFields.DEFAULT_SOUND, soundLast
+        ).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    SharedPreferencesUtil.saveApplicationTheme(
+                            SettingsActivity.this,
+                            userId,
+                            appThemeLast
+                    );
+                    Toast.makeText(SettingsActivity.this,
+                            R.string.update_ok_message, Toast.LENGTH_SHORT).show();
+
+                    Intent mainIntent = new Intent(SettingsActivity.this,
+                            MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                } else {
+                    Toast.makeText(SettingsActivity.this,
+                            R.string.update_error_message, Toast.LENGTH_SHORT).show();
                 }
             }
         });

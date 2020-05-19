@@ -28,8 +28,9 @@
         android:layout_height="44dp"
         android:alpha="0.90"
         android:autofillHints=""
+        android:hint="@string/sound"
         android:background="@drawable/rounded_edit_text_shape"
-        android:ems="14"
+        android:ems="12"
         android:fontFamily="@font/montserrat"
         android:inputType="text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -40,8 +41,17 @@
         app:layout_constraintBottom_toTopOf="@id/settings_default_reminder_frequency_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/settings_default_sound_text"
-        app:layout_constraintTop_toBottomOf="@id/settings_default_sound_text"
-        tools:text="SOUND" />
+        app:layout_constraintTop_toBottomOf="@id/settings_default_sound_text" />
+
+    <Button
+        android:id="@+id/settings_sound_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_folder_accent_48dp"
+        app:layout_constraintBottom_toBottomOf="@id/settings_default_sound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settings_default_sound"
+        app:layout_constraintTop_toTopOf="@id/settings_default_sound" />
 
     <TextView
         android:id="@+id/settings_default_reminder_frequency_text"
@@ -104,9 +114,10 @@
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/gray"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/settings_default_sound"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -113,6 +113,8 @@
     <string name="splash_footer_text">Yildiz Calendar App © 2020</string>
     <string name="splash_before_logo_text">We are the knights who say Ni!</string>
     <string name="splash_after_logo_text">Best calendar app ever!</string>
+    <string name="sound">Sound</string>
+    <string name="select_sound_message">Select Sound</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>
