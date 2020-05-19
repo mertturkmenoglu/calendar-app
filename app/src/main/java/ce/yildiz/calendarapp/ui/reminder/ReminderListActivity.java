@@ -45,7 +45,6 @@ public class ReminderListActivity extends AppCompatActivity {
             setTheme(R.style.AppTheme);
         }
 
-
         super.onCreate(savedInstanceState);
         binding = ActivityReminderListBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
@@ -73,6 +72,7 @@ public class ReminderListActivity extends AppCompatActivity {
                 .collection(Constants.Collections.USER_EVENTS)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -82,7 +82,7 @@ public class ReminderListActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : snapshot) {
                                 Event e = document.toObject(Event.class);
 
-                                if (e.getName().equals(name)) {
+                                if (e != null && e.getName().equals(name)) {
                                     mEvent = e;
                                     break;
                                 }

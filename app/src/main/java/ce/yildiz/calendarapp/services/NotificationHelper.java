@@ -47,7 +47,9 @@ class NotificationHelper extends ContextWrapper {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(icon);
+                .setSmallIcon(icon)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_ALARM);
     }
 
 }

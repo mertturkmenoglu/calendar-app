@@ -14,6 +14,62 @@ import ce.yildiz.calendarapp.services.SoundAlertReceiver;
 import ce.yildiz.calendarapp.services.VibrationAlertReceiver;
 
 public class NotificationUtil {
+    public static void startRepeatingNotification(Context ctx, Date d, int requestCode,
+                                                  String title, String content,
+                                                  String reminderFreq) {
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(ctx, NotificationAlertReceiver.class);
+        intent.putExtra("title", title);
+        intent.putExtra("content", content);
+        intent.putExtra("icon", R.drawable.web_hi_res_512);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                ctx,
+                requestCode,
+                intent,
+                0
+        );
+
+        if (d.getTime() <= Calendar.getInstance().getTimeInMillis() || alarmManager == null) {
+            return;
+        }
+
+        long interval;
+
+        switch (reminderFreq) {
+            case Constants.ReminderFrequencies.DAILY:
+                interval = AlarmManager.INTERVAL_DAY;
+                break;
+            case Constants.ReminderFrequencies.WEEKLY:
+                interval = AlarmManager.INTERVAL_DAY * 7;
+                break;
+            case Constants.ReminderFrequencies.MONTHLY:
+                interval = AlarmManager.INTERVAL_DAY * 30;
+                break;
+            default:
+                interval = AlarmManager.INTERVAL_HOUR;
+                break;
+        }
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, d.getTime(), interval, pendingIntent);
+    }
+
+    public static void cancelRepeatingNotification(Context ctx, int requestCode) {
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(ctx, NotificationAlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                ctx,
+                requestCode,
+                intent,
+                0
+        );
+
+        if (alarmManager == null) return;
+
+        alarmManager.cancel(pendingIntent);
+    }
+
+    @SuppressWarnings("unused")
     public static void startNotification(Context ctx, Date d, int requestCode, String title, String content) {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ctx, NotificationAlertReceiver.class);
@@ -35,6 +91,7 @@ public class NotificationUtil {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, d.getTime(), pendingIntent);
     }
 
+    @SuppressWarnings("unused")
     public static void cancelNotification(Context ctx, int requestCode) {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ctx, NotificationAlertReceiver.class);
