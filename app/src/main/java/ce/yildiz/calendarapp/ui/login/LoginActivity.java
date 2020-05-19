@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         View root = binding.getRoot();
         setContentView(root);
 
+        binding.loginLoginProgressBar.setVisibility(View.GONE);
+
         mAuth = FirebaseAuth.getInstance();
 
         // Check if user is logged in
@@ -81,14 +83,19 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                binding.loginLoginProgressBar.setVisibility(View.VISIBLE);
+
                 mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        binding.loginLoginProgressBar.setVisibility(View.GONE);
+
                         if (task.isSuccessful()){
                             SharedPreferencesUtil.loadApplicationTheme(LoginActivity.this, mAuth.getCurrentUser().getUid());
                             Toast.makeText(LoginActivity.this, R.string.login_ok_message, Toast.LENGTH_SHORT).show();
 
                             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(mainIntent);
                         } else {
                             Toast.makeText(LoginActivity.this,

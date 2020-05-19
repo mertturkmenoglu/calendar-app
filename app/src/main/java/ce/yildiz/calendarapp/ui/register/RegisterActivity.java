@@ -39,6 +39,8 @@ public class RegisterActivity extends AppCompatActivity {
         View root = binding.getRoot();
         setContentView(root);
 
+        binding.signUpProgressBar.setVisibility(View.GONE);
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -68,9 +70,13 @@ public class RegisterActivity extends AppCompatActivity {
                     binding.signUpGithubUsernameEt.setError(getString(R.string.field_empty_message));
                 }
 
+                binding.signUpProgressBar.setVisibility(View.VISIBLE);
+
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        binding.signUpProgressBar.setVisibility(View.GONE);
+
                         if (task.isSuccessful()){
                             if (mAuth.getCurrentUser() == null) {
                                 return;

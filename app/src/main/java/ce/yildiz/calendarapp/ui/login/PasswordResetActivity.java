@@ -26,16 +26,21 @@ public class PasswordResetActivity extends AppCompatActivity {
         View root = binding.getRoot();
         setContentView(root);
 
+        binding.forgotPasswordProgressBar.setVisibility(View.GONE);
+
         mAuth = FirebaseAuth.getInstance();
 
         binding.forgotPasswordResetPasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String email = binding.forgotPasswordLoginEt.getText().toString().trim();
+                binding.forgotPasswordProgressBar.setVisibility(View.VISIBLE);
 
                 mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        binding.forgotPasswordProgressBar.setVisibility(View.GONE);
+
                         Toast.makeText(PasswordResetActivity.this,
                                 R.string.password_reset_link_send_ok_message, Toast.LENGTH_SHORT).show();
                         finish();
@@ -43,6 +48,8 @@ public class PasswordResetActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        binding.forgotPasswordProgressBar.setVisibility(View.GONE);
+
                         Toast.makeText(PasswordResetActivity.this,
                                 R.string.password_reset_link_send_error_message, Toast.LENGTH_SHORT).show();
                     }
