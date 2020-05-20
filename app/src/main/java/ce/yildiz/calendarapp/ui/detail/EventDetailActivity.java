@@ -13,6 +13,9 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -111,22 +114,46 @@ public class EventDetailActivity extends AppCompatActivity {
         binding.eventDetailLocationButton.setOnClickListener(v -> getLocation());
 
         binding.eventDetailRemindersButton.setOnClickListener(v -> openReminders());
+    }
 
-        binding.eventDetailSaveButton.setOnClickListener(v -> {
-            if (originalEventName == null) {
-                save();
-            } else {
-                update();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.event_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.event_menu_delete: {
+                if (originalEventName != null) {
+                    delete();
+                }
+
+                break;
             }
-        });
 
-        binding.eventDetailShareButton.setOnClickListener(v -> share());
-
-        binding.eventDetailDeleteButton.setOnClickListener(v -> {
-            if (originalEventName != null) {
-                delete();
+            case R.id.event_menu_share: {
+                share();
+                break;
             }
-        });
+
+            case R.id.event_menu_save: {
+                if (originalEventName == null) {
+                    save();
+                } else {
+                    update();
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return true;
     }
 
     private void setApplicationTheme() {
