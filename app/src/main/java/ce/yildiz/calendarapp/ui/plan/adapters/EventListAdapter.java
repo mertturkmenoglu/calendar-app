@@ -59,13 +59,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, final int position) {
-        final Locale locale = new Locale("tr", "TR");
         Event event = mEvents.get(position);
+        final Locale locale = new Locale("tr", "TR");
+        final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, locale)
+                .format(event.getStartDate());
+
         holder.nameTV.setText(event.getName());
         holder.detailTV.setText(event.getDetail());
-        holder.startDateTV.setText(
-                DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(event.getStartDate())
-        );
+        holder.startDateTV.setText(formattedDate);
     }
 
     @Override

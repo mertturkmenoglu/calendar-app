@@ -56,8 +56,11 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         final Locale locale = new Locale("tr", "TR");
-        Date d = mReminders.get(position);
-        holder.dateTV.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(d.getTime()));
+        final Date date = mReminders.get(position);
+        final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, locale)
+                .format(date.getTime());
+
+        holder.dateTV.setText(formattedDate);
     }
 
     @Override
