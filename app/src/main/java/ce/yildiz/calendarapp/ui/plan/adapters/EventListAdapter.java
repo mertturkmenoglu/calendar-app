@@ -63,7 +63,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         Event event = mEvents.get(position);
         holder.nameTV.setText(event.getName());
         holder.detailTV.setText(event.getDetail());
-        holder.startDateTV.setText(DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(event.getStartDate()));
+        holder.startDateTV.setText(
+                DateFormat.getDateInstance(DateFormat.DEFAULT, locale).format(event.getStartDate())
+        );
     }
 
     @Override

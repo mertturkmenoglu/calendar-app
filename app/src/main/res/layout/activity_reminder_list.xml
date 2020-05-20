@@ -7,7 +7,7 @@
     tools:context=".ui.reminder.ReminderListActivity">
 
     <TextView
-        android:id="@+id/daily_plan_title"
+        android:id="@+id/reminder_list_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -26,35 +26,29 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/add_new_event_button"
+        app:layout_constraintBottom_toTopOf="@id/reminder_list_add_fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/daily_plan_title" />
+        app:layout_constraintTop_toBottomOf="@id/reminder_list_title" />
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/daily_plan_title"
+        app:layout_constraintTop_toBottomOf="@id/reminder_list_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/add_new_event_button"
+        app:layout_constraintBottom_toTopOf="@id/reminder_list_add_fab"
         android:visibility="gone"
-        android:text="@string/no_data_available" />
+        android:text="@string/no_reminder_available" />
 
-    <Button
-        android:id="@+id/add_new_reminder"
-        android:layout_width="175dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/reminder_list_add_fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/login_button_shape"
-        android:fontFamily="@font/montserrat"
-        android:text="@string/new_reminder"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/gray"
+        android:src="@drawable/ic_add_white_24dp"
+        android:layout_margin="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
