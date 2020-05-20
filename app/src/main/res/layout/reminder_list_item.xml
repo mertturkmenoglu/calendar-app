@@ -12,17 +12,23 @@
         android:id="@+id/reminder_list_item_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardview_dark_background">
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="@color/darkBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cardview_dark_background">
+            android:background="@color/darkBackground">
 
             <TextView
                 android:id="@+id/reminder_list_item_reminder_date"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
