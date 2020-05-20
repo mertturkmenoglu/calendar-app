@@ -10,9 +10,24 @@ import android.net.Uri;
 public class SoundAlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone ringtone = RingtoneManager.getRingtone(context, soundUri);
+        if (intent == null) return;
 
-        ringtone.play();
+        String defaultSound = intent.getStringExtra("default_sound");
+        Uri soundUri;
+
+        if (defaultSound == null) {
+            soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        } else {
+            soundUri = Uri.parse(defaultSound);
+        }
+
+        try {
+            Ringtone ringtone = RingtoneManager.getRingtone(context, soundUri);
+            ringtone.play();
+        } catch (Exception e) {
+            Ringtone ringtone = RingtoneManager.getRingtone(context,
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            ringtone.play();
+        }
     }
 }
