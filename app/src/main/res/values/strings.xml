@@ -115,6 +115,7 @@
     <string name="splash_after_logo_text">Best calendar app ever!</string>
     <string name="sound">Sound</string>
     <string name="select_sound_message">Select Sound</string>
+    <string name="no_reminder_available">There are no reminders</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

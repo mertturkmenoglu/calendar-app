@@ -26,7 +26,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/add_new_event_button"
+        app:layout_constraintBottom_toTopOf="@+id/daily_plan_add_fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/daily_plan_title" />
@@ -38,23 +38,17 @@
         app:layout_constraintTop_toBottomOf="@id/daily_plan_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/add_new_event_button"
+        app:layout_constraintBottom_toTopOf="@id/daily_plan_add_fab"
         android:visibility="gone"
         android:text="@string/no_data_available" />
 
-    <Button
-        android:id="@+id/add_new_event_button"
-        android:layout_width="175dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/daily_plan_add_fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/login_button_shape"
-        android:fontFamily="@font/montserrat"
-        android:text="@string/new_event"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_margin="32dp"
+        android:src="@drawable/ic_add_white_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
