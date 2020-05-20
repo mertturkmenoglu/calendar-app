@@ -6,12 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +22,14 @@ import ce.yildiz.calendarapp.databinding.ActivityRegisterBinding;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
 
+@SuppressWarnings("CodeBlock2Expr")
 public class RegisterActivity extends AppCompatActivity {
     private ActivityRegisterBinding binding;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private String mEmail;
+    private String mPassword;
+    private String mGithubUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,89 +44,95 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        binding.signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String email = binding.signUpEmailEt.getText().toString().trim();
-                final String password = binding.signUpPasswordEt.getText().toString().trim();
-                final String githubUsername = binding.signUpGithubUsernameEt.getText().toString().trim();
+        binding.signUpButton.setOnClickListener(v -> register());
+    }
 
-                if (TextUtils.isEmpty(email)) {
-                    binding.signUpEmailEt.setError(getString(R.string.field_empty_message));
-                    return;
-                }
+    private void register() {
+        if (!fieldsCorrect()) {
+            return;
+        }
 
-                if (TextUtils.isEmpty(password)) {
-                    binding.signUpPasswordEt.setError(getString(R.string.field_empty_message));
-                    return;
-                }
+        binding.signUpProgressBar.setVisibility(View.VISIBLE);
 
-                if (password.length() < Constants.MIN_PASSWORD_LENGTH) {
-                    binding.signUpPasswordEt.setError(getString(R.string.password_short_error));
-                    return;
-                }
+        Task<AuthResult> result = mAuth.createUserWithEmailAndPassword(mEmail, mPassword);
 
-                if (TextUtils.isEmpty(githubUsername)) {
-                    binding.signUpGithubUsernameEt.setError(getString(R.string.field_empty_message));
-                }
+        result.addOnSuccessListener(authResult -> {
+            binding.signUpProgressBar.setVisibility(View.GONE);
 
-                binding.signUpProgressBar.setVisibility(View.VISIBLE);
+            saveToDatabase();
 
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        binding.signUpProgressBar.setVisibility(View.GONE);
-
-                        if (task.isSuccessful()){
-                            if (mAuth.getCurrentUser() == null) {
-                                return;
-                            }
-
-                            String userId = mAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
-
-                            Map<String, Object> user = new HashMap<>();
-                            user.put(Constants.UserFields.EMAIL, email);
-                            user.put(Constants.UserFields.GITHUB_USERNAME, githubUsername);
-                            user.put(Constants.UserFields.DEFAULT_SOUND, Constants.DEFAULT_SOUND);
-                            user.put(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, Constants.DEFAULT_REMINDER_FREQUENCY);
-                            user.put(Constants.UserFields.APP_THEME, Constants.AppThemes.DARK);
-
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(RegisterActivity.this,
-                                            R.string.registration_ok_message, Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(RegisterActivity.this,
-                                            R.string.registration_error_message, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                            Map<String, Object> events = new HashMap<>();
-
-                            documentReference.collection(Constants.Collections.USER_EVENTS)
-                                    .document().set(events)
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(RegisterActivity.this,
-                                                    R.string.registration_error_message, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                            startActivity(mainIntent);
-                        } else {
-                            Toast.makeText(RegisterActivity.this,
-                                    R.string.registration_error_message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(mainIntent);
         });
+
+        result.addOnFailureListener(e -> {
+            Toast.makeText(this,
+                    R.string.registration_error_message, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void saveToDatabase() {
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+
+        String userId = mAuth.getCurrentUser().getUid();
+        DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
+
+        Map<String, Object> user = new HashMap<>();
+        user.put(Constants.UserFields.EMAIL, mEmail);
+        user.put(Constants.UserFields.GITHUB_USERNAME, mGithubUsername);
+        user.put(Constants.UserFields.DEFAULT_SOUND, Constants.DEFAULT_SOUND);
+        user.put(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, Constants.DEFAULT_REMINDER_FREQUENCY);
+        user.put(Constants.UserFields.APP_THEME, Constants.AppThemes.DARK);
+
+        Task<Void> result = documentReference.set(user);
+
+        result.addOnSuccessListener(o -> {
+            Toast.makeText(RegisterActivity.this,
+                    R.string.registration_ok_message, Toast.LENGTH_SHORT).show();
+        });
+
+        result.addOnFailureListener(e -> {
+            Toast.makeText(RegisterActivity.this,
+                    R.string.registration_error_message, Toast.LENGTH_SHORT).show();
+        });
+
+        Map<String, Object> events = new HashMap<>();
+
+        documentReference.collection(Constants.Collections.USER_EVENTS)
+                .document().set(events)
+                .addOnFailureListener(e -> {
+                    Toast.makeText(RegisterActivity.this,
+                            R.string.registration_error_message, Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private boolean fieldsCorrect() {
+        mEmail = binding.signUpEmailEt.getText().toString().trim();
+        mPassword = binding.signUpPasswordEt.getText().toString().trim();
+        mGithubUsername = binding.signUpGithubUsernameEt.getText().toString().trim();
+
+        if (TextUtils.isEmpty(mEmail)) {
+            binding.signUpEmailEt.setError(getString(R.string.field_empty_message));
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mPassword)) {
+            binding.signUpPasswordEt.setError(getString(R.string.field_empty_message));
+            return false;
+        }
+
+        if (mPassword.length() < Constants.MIN_PASSWORD_LENGTH) {
+            binding.signUpPasswordEt.setError(getString(R.string.password_short_error));
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mGithubUsername)) {
+            binding.signUpGithubUsernameEt.setError(getString(R.string.field_empty_message));
+            return false;
+        }
+
+        return true;
     }
 }

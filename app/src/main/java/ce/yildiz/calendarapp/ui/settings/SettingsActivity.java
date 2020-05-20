@@ -9,11 +9,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,6 +26,7 @@ import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
+@SuppressWarnings("CodeBlock2Expr")
 public class SettingsActivity extends AppCompatActivity {
     public static final int RINGTONE_REQUEST_CODE = 10;
     private ActivitySettingsBinding binding;
@@ -59,19 +58,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         userId = mAuth.getCurrentUser().getUid();
 
-        db.collection(Constants.Collections.USERS).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot == null) return;
+        Task<DocumentSnapshot> result = db.collection(Constants.Collections.USERS)
+                .document(userId)
+                .get();
 
-                    setContents(documentSnapshot);
-                } else {
-                    Toast.makeText(SettingsActivity.this,
-                            R.string.login_error_message, Toast.LENGTH_SHORT).show();
-                }
-            }
+        result.addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot == null) return;
+            setContents(documentSnapshot);
+        });
+
+        result.addOnFailureListener(e -> {
+            Toast.makeText(this, R.string.login_error_message, Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -106,19 +103,9 @@ public class SettingsActivity extends AppCompatActivity {
         List<String> themeChoices = Arrays.asList(getResources().getStringArray(R.array.app_theme));
         binding.settingsAppThemeSpinner.setSelection(themeChoices.indexOf(appTheme));
 
-        binding.settingsSoundButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseSound();
-            }
-        });
+        binding.settingsSoundButton.setOnClickListener(v -> chooseSound());
 
-        binding.settingsSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save();
-            }
-        });
+        binding.settingsSaveButton.setOnClickListener(v -> save());
     }
 
     private void chooseSound() {
@@ -155,31 +142,29 @@ public class SettingsActivity extends AppCompatActivity {
         final String freqLast = (String) binding.settingsDefaultReminderFrequencySpinner.getSelectedItem();
         final String soundLast = binding.settingsDefaultSound.getText().toString().trim();
 
-        db.collection(Constants.Collections.USERS).document(userId).update(
+        Task<Void> result = db.collection(Constants.Collections.USERS).document(userId).update(
                 Constants.UserFields.APP_THEME, appThemeLast,
                 Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, freqLast,
                 Constants.UserFields.DEFAULT_SOUND, soundLast
-        ).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    SharedPreferencesUtil.saveApplicationTheme(
-                            SettingsActivity.this,
-                            userId,
-                            appThemeLast
-                    );
-                    Toast.makeText(SettingsActivity.this,
-                            R.string.update_ok_message, Toast.LENGTH_SHORT).show();
+        );
 
-                    Intent mainIntent = new Intent(SettingsActivity.this,
-                            MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
-                } else {
-                    Toast.makeText(SettingsActivity.this,
-                            R.string.update_error_message, Toast.LENGTH_SHORT).show();
-                }
-            }
+        result.addOnSuccessListener(o -> {
+            SharedPreferencesUtil.saveApplicationTheme(
+                    SettingsActivity.this,
+                    userId,
+                    appThemeLast
+            );
+            Toast.makeText(SettingsActivity.this,
+                    R.string.update_ok_message, Toast.LENGTH_SHORT).show();
+
+            Intent mainIntent = new Intent(SettingsActivity.this,
+                    MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        });
+
+        result.addOnFailureListener(e -> {
+            Toast.makeText(this, R.string.update_error_message, Toast.LENGTH_SHORT).show();
         });
     }
 }

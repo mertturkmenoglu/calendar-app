@@ -4,12 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ce.yildiz.calendarapp.R;
@@ -30,31 +27,24 @@ public class PasswordResetActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        binding.forgotPasswordResetPasswordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String email = binding.forgotPasswordLoginEt.getText().toString().trim();
-                binding.forgotPasswordProgressBar.setVisibility(View.VISIBLE);
+        binding.forgotPasswordResetPasswordBtn.setOnClickListener(v -> reset());
+    }
 
-                mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        binding.forgotPasswordProgressBar.setVisibility(View.GONE);
+    private void reset() {
+        final String email = binding.forgotPasswordLoginEt.getText().toString().trim();
+        binding.forgotPasswordProgressBar.setVisibility(View.VISIBLE);
 
-                        Toast.makeText(PasswordResetActivity.this,
-                                R.string.password_reset_link_send_ok_message, Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        binding.forgotPasswordProgressBar.setVisibility(View.GONE);
+        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(o -> {
+            binding.forgotPasswordProgressBar.setVisibility(View.GONE);
 
-                        Toast.makeText(PasswordResetActivity.this,
-                                R.string.password_reset_link_send_error_message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            Toast.makeText(this,
+                    R.string.password_reset_link_send_ok_message, Toast.LENGTH_SHORT).show();
+            finish();
+        }).addOnFailureListener(e -> {
+            binding.forgotPasswordProgressBar.setVisibility(View.GONE);
+
+            Toast.makeText(this,
+                    R.string.password_reset_link_send_error_message, Toast.LENGTH_SHORT).show();
         });
     }
 }

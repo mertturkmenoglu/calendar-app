@@ -6,11 +6,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,70 +38,66 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is logged in
         if (mAuth.getCurrentUser() != null) {
             SharedPreferencesUtil.loadApplicationTheme(this, mAuth.getCurrentUser().getUid());
+
             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+
             startActivity(mainIntent);
             finish();
             return;
         }
 
-        binding.loginForgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent passwordResetIntent = new Intent(LoginActivity.this, PasswordResetActivity.class);
-                startActivity(passwordResetIntent);
-            }
+        binding.loginForgotPasswordText.setOnClickListener(v -> {
+            Intent passwordResetIntent = new Intent(LoginActivity.this,
+                    PasswordResetActivity.class);
+            startActivity(passwordResetIntent);
         });
 
-        binding.loginSignUpText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signUpIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(signUpIntent);
-            }
+        binding.loginSignUpText.setOnClickListener(v -> {
+            Intent signUpIntent = new Intent(LoginActivity.this,
+                    RegisterActivity.class);
+            startActivity(signUpIntent);
         });
 
-        binding.loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String email = binding.loginLoginEt.getText().toString().trim();
-                final String password = binding.loginPasswordEt.getText().toString().trim();
+        binding.loginButton.setOnClickListener(v -> login());
+    }
 
-                if (TextUtils.isEmpty(email)) {
-                    binding.loginLoginEt.setError(getString(R.string.field_empty_message));
-                    return;
-                }
+    private void login() {
+        final String email = binding.loginLoginEt.getText().toString().trim();
+        final String password = binding.loginPasswordEt.getText().toString().trim();
 
-                if (TextUtils.isEmpty(password)) {
-                    binding.loginPasswordEt.setError(getString(R.string.field_empty_message));
-                    return;
-                }
+        if (TextUtils.isEmpty(email)) {
+            binding.loginLoginEt.setError(getString(R.string.field_empty_message));
+            return;
+        }
 
-                if (password.length() < Constants.MIN_PASSWORD_LENGTH) {
-                    binding.loginPasswordEt.setError(getString(R.string.password_short_error));
-                    return;
-                }
+        if (TextUtils.isEmpty(password)) {
+            binding.loginPasswordEt.setError(getString(R.string.field_empty_message));
+            return;
+        }
 
-                binding.loginLoginProgressBar.setVisibility(View.VISIBLE);
+        if (password.length() < Constants.MIN_PASSWORD_LENGTH) {
+            binding.loginPasswordEt.setError(getString(R.string.password_short_error));
+            return;
+        }
 
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        binding.loginLoginProgressBar.setVisibility(View.GONE);
+        binding.loginLoginProgressBar.setVisibility(View.VISIBLE);
 
-                        if (task.isSuccessful()){
-                            SharedPreferencesUtil.loadApplicationTheme(LoginActivity.this, mAuth.getCurrentUser().getUid());
-                            Toast.makeText(LoginActivity.this, R.string.login_ok_message, Toast.LENGTH_SHORT).show();
+        Task<AuthResult> loginTask = mAuth.signInWithEmailAndPassword(email, password);
 
-                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(mainIntent);
-                        } else {
-                            Toast.makeText(LoginActivity.this,
-                                    R.string.login_error_message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+        loginTask.addOnSuccessListener(o -> {
+            if (mAuth.getCurrentUser() == null) return;
+
+            SharedPreferencesUtil.loadApplicationTheme(this, mAuth.getCurrentUser().getUid());
+            Toast.makeText(this, R.string.login_ok_message, Toast.LENGTH_SHORT).show();
+
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(mainIntent);
         });
+
+        loginTask.addOnFailureListener(e ->
+                Toast.makeText(this,
+                        R.string.login_error_message, Toast.LENGTH_SHORT).show()
+        );
     }
 }
