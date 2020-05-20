@@ -2,8 +2,12 @@ package ce.yildiz.calendarapp.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -88,18 +92,34 @@ public class MainActivity extends AppCompatActivity {
             Intent monthlyPlanIntent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
             startActivity(monthlyPlanIntent);
         });
+    }
 
-        binding.mainSettingsButton.setOnClickListener(v -> {
-            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            finish();
-        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
 
-        binding.logoutButton.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-        });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                finish();
+                break;
+            case R.id.menu_logout:
+                FirebaseAuth.getInstance().signOut();
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+                finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 }
