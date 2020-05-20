@@ -57,12 +57,13 @@ public class RegisterActivity extends AppCompatActivity {
         Task<AuthResult> result = mAuth.createUserWithEmailAndPassword(mEmail, mPassword);
 
         result.addOnSuccessListener(authResult -> {
-            binding.signUpProgressBar.setVisibility(View.GONE);
+            mAuth.signInWithEmailAndPassword(mEmail, mPassword).addOnSuccessListener(authResult1 -> {
+                saveToDatabase();
 
-            saveToDatabase();
-
-            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(mainIntent);
+                binding.signUpProgressBar.setVisibility(View.GONE);
+                Intent mainIntent = new Intent(this, MainActivity.class);
+                startActivity(mainIntent);
+            });
         });
 
         result.addOnFailureListener(e -> {
