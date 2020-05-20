@@ -307,12 +307,12 @@ public class EventDetailActivity extends AppCompatActivity {
         int currentDay = c.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
-            startDate.setYear(year - Constants.DATE_YEAR_DIFF);
-            startDate.setMonth(month);
-            startDate.setDate(dayOfMonth);
+            endDate.setYear(year - Constants.DATE_YEAR_DIFF);
+            endDate.setMonth(month);
+            endDate.setDate(dayOfMonth);
 
             final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale)
-                    .format(startDate);
+                    .format(endDate);
 
             binding.eventDetailEndDate.setText(formattedDate);
         };
@@ -335,11 +335,11 @@ public class EventDetailActivity extends AppCompatActivity {
         int currentMinute = c.get(Calendar.MINUTE);
 
         TimePickerDialog.OnTimeSetListener timeSetListener = (view, hour, minute) -> {
-            startDate.setHours(hour);
-            startDate.setMinutes(minute);
+            endDate.setHours(hour);
+            endDate.setMinutes(minute);
 
             final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale)
-                    .format(startDate);
+                    .format(endDate);
 
             binding.eventDetailEndDate.setText(formattedDate);
         };
