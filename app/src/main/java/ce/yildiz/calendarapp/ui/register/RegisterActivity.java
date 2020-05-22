@@ -67,6 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         result.addOnFailureListener(e -> {
+            binding.signUpProgressBar.setVisibility(View.GONE);
+
             Toast.makeText(this,
                     R.string.registration_error_message, Toast.LENGTH_SHORT).show();
         });
