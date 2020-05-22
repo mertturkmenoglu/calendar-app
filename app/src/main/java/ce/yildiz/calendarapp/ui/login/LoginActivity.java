@@ -85,6 +85,8 @@ public class LoginActivity extends AppCompatActivity {
         Task<AuthResult> loginTask = mAuth.signInWithEmailAndPassword(email, password);
 
         loginTask.addOnSuccessListener(o -> {
+            binding.loginLoginProgressBar.setVisibility(View.GONE);
+
             if (mAuth.getCurrentUser() == null) return;
 
             SharedPreferencesUtil.loadApplicationTheme(this, mAuth.getCurrentUser().getUid());
@@ -95,9 +97,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(mainIntent);
         });
 
-        loginTask.addOnFailureListener(e ->
-                Toast.makeText(this,
-                        R.string.login_error_message, Toast.LENGTH_SHORT).show()
-        );
+        loginTask.addOnFailureListener(e -> {
+            binding.loginLoginProgressBar.setVisibility(View.GONE);
+
+            Toast.makeText(this,
+                    R.string.login_error_message, Toast.LENGTH_SHORT).show();
+        });
     }
 }
