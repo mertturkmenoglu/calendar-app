@@ -105,11 +105,11 @@
     <string name="default_notification_title">CalendarEvent</string>
     <string name="default_notification_content">There is an event soon</string>
     <string name="invalid_date">Invalid date</string>
-    <string name="event_share_event_name">\"Event Name: \"</string>
-    <string name="event_share_event_detail">\"Event Detail: \"</string>
-    <string name="event_share_event_start_date">\"Start Date: \"</string>
-    <string name="event_share_event_end_date">\"End Date: \"</string>
-    <string name="event_share_location">\"Location: \"</string>
+    <string name="event_share_event_name">Event Name</string>
+    <string name="event_share_event_detail">Event Detail</string>
+    <string name="event_share_event_start_date">Start Date</string>
+    <string name="event_share_event_end_date">End Date</string>
+    <string name="event_share_location">Location</string>
     <string name="splash_footer_text">Yildiz Calendar App © 2020</string>
     <string name="splash_before_logo_text">We are the knights who say Ni!</string>
     <string name="splash_after_logo_text">Best calendar app ever!</string>
