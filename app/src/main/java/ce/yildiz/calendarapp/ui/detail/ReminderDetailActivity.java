@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String userId;
     private String eventName;
+    private Event mEvent;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -67,9 +69,13 @@ public class ReminderDetailActivity extends AppCompatActivity {
         long timeLong = i.getLongExtra("reminder", -1);
         eventName = i.getStringExtra("name");
         userId = i.getStringExtra("userId");
+        String eventJsonString = i.getStringExtra("event");
+
         final Locale locale = new Locale("en", "UK");
 
-        if (eventName == null || userId == null) return;
+        if (eventName == null || userId == null || eventJsonString == null) return;
+
+        mEvent = new Gson().fromJson(eventJsonString, Event.class);
 
         if (timeLong != -1) {
             mDate = new Date(timeLong);
@@ -119,16 +125,27 @@ public class ReminderDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.reminder_menu_save: {
+                if (mDate != null &&
+                        (mDate.before(mEvent.getStartDate()) || mDate.after(mEvent.getEndDate()))) {
+                    Toast.makeText(this,
+                            R.string.reminder_date_err_message, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if (mOriginalDate == null) {
                     save();
                 } else {
                     update();
                 }
 
-                Intent reminderListIntent = new Intent(this, ReminderListActivity.class);
+                Intent reminderListIntent = new Intent(this,
+                        ReminderListActivity.class);
+
                 reminderListIntent.putExtra("name", eventName);
+                reminderListIntent.putExtra("event", new Gson().toJson(mEvent));
                 reminderListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                 startActivity(reminderListIntent);
                 finish();
 
@@ -136,16 +153,19 @@ public class ReminderDetailActivity extends AppCompatActivity {
             }
 
             case R.id.reminder_menu_delete: {
-                if (mOriginalDate != null) {
-                    delete();
+                if (null == mOriginalDate) break;
 
-                    Intent reminderListIntent = new Intent(this, ReminderListActivity.class);
-                    reminderListIntent.putExtra("name", eventName);
-                    reminderListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(reminderListIntent);
-                    finish();
-                }
+                delete();
+                Intent reminderListIntent = new Intent(this,
+                        ReminderListActivity.class);
+
+                reminderListIntent.putExtra("name", eventName);
+                reminderListIntent.putExtra("event", new Gson().toJson(mEvent));
+                reminderListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                startActivity(reminderListIntent);
+                finish();
 
                 break;
             }
@@ -158,6 +178,8 @@ public class ReminderDetailActivity extends AppCompatActivity {
     }
 
     private void save() {
+        if (db == null) return;
+
         Task<QuerySnapshot> result = db.collection(Constants.Collections.USERS)
                 .document(userId)
                 .collection(Constants.Collections.USER_EVENTS)

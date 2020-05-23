@@ -81,6 +81,7 @@ public class ReminderListActivity extends AppCompatActivity {
 
             reminderDetailIntent.putExtra("name", mEventName);
             reminderDetailIntent.putExtra("userId", mUserId);
+            reminderDetailIntent.putExtra("event", mData);
 
             startActivity(reminderDetailIntent);
             finish();
@@ -97,6 +98,7 @@ public class ReminderListActivity extends AppCompatActivity {
             reminderDetailIntent.putExtra("reminder", reminders.get(position).getTime());
             reminderDetailIntent.putExtra("name", mEventName);
             reminderDetailIntent.putExtra("userId", mUserId);
+            reminderDetailIntent.putExtra("event", mData);
 
             startActivity(reminderDetailIntent);
         };

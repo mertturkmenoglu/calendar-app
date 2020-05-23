@@ -117,6 +117,7 @@
     <string name="select_sound_message">Select Sound</string>
     <string name="no_reminder_available">There are no reminders</string>
     <string name="settings_normal_case">Settings</string>
+    <string name="reminder_date_err_message">Reminder date is invalid</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>

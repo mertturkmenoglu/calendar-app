@@ -184,6 +184,8 @@ public class EventDetailActivity extends AppCompatActivity {
     private void loadData(@NonNull String jsonString) {
         Event e = new Gson().fromJson(jsonString, Event.class);
 
+        if (e == null) return;
+
         originalEventName = e.getName();
         binding.eventDetailEventName.setText(e.getName());
         binding.eventDetailDetail.setText(e.getDetail());
