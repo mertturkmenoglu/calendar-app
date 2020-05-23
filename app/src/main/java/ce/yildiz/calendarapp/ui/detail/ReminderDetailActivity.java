@@ -25,6 +25,7 @@ import java.util.Locale;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityReminderDetailBinding;
 import ce.yildiz.calendarapp.models.Event;
+import ce.yildiz.calendarapp.ui.reminder.ReminderListActivity;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
@@ -130,6 +131,13 @@ public class ReminderDetailActivity extends AppCompatActivity {
             case R.id.reminder_menu_delete: {
                 if (mOriginalDate != null) {
                     delete();
+
+                    Intent reminderListIntent = new Intent(this, ReminderListActivity.class);
+                    reminderListIntent.putExtra("name", eventName);
+                    reminderListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(reminderListIntent);
+                    finish();
                 }
 
                 break;
