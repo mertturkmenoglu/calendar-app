@@ -71,6 +71,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String userId;
+    private String mData;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private Locale mLocale = new Locale("tr", "TR");
@@ -90,10 +91,10 @@ public class EventDetailActivity extends AppCompatActivity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        String jsonString = i.getStringExtra("event");
+        mData = i.getStringExtra("event");
 
-        if (jsonString != null) {
-            loadData(jsonString);
+        if (mData != null) {
+            loadData(mData);
         } else {
             createViews();
         }
@@ -115,6 +116,14 @@ public class EventDetailActivity extends AppCompatActivity {
         binding.eventDetailLocationButton.setOnClickListener(v -> getLocation());
 
         binding.eventDetailRemindersButton.setOnClickListener(v -> openReminders());
+
+        binding.eventDetailBackFab.setOnClickListener(v -> {
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(mainIntent);
+            finish();
+        });
     }
 
     @Override
@@ -374,6 +383,7 @@ public class EventDetailActivity extends AppCompatActivity {
         }
 
         reminderListIntent.putExtra("name", originalEventName);
+        reminderListIntent.putExtra("event", mData);
         startActivity(reminderListIntent);
     }
 

@@ -17,6 +17,7 @@ import java.util.List;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityReminderListBinding;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
+import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
 import ce.yildiz.calendarapp.ui.detail.ReminderDetailActivity;
 import ce.yildiz.calendarapp.ui.reminder.adapters.ReminderListAdapter;
 import ce.yildiz.calendarapp.ui.reminder.viewmodels.ReminderListActivityViewModel;
@@ -29,6 +30,7 @@ public class ReminderListActivity extends AppCompatActivity {
     private ReminderListActivityViewModel viewModel;
     private String mEventName;
     private String mUserId;
+    private String mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class ReminderListActivity extends AppCompatActivity {
         if (i == null) return;
 
         mEventName = i.getStringExtra("name");
+        mData = i.getStringExtra("event");
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -62,6 +65,15 @@ public class ReminderListActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ReminderListActivityViewModel.class);
         viewModel.getReminders(mEventName).observe(this, this::initRecyclerView);
+
+        binding.reminderListBackFab.setOnClickListener(v -> {
+            Intent eventDetailIntent = new Intent(this, EventDetailActivity.class);
+            eventDetailIntent.putExtra("event", mData);
+            eventDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(eventDetailIntent);
+            finish();
+        });
 
         binding.reminderListAddFab.setOnClickListener(v -> {
             Intent reminderDetailIntent = new Intent(ReminderListActivity.this,
