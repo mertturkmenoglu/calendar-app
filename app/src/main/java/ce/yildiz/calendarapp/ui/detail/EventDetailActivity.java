@@ -137,7 +137,10 @@ public class EventDetailActivity extends AppCompatActivity {
             }
 
             case R.id.event_menu_share: {
-                share();
+                if (originalEventName != null) {
+                    share();
+                }
+
                 break;
             }
 
