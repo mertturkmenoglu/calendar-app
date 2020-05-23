@@ -125,6 +125,13 @@ public class ReminderDetailActivity extends AppCompatActivity {
                     update();
                 }
 
+                Intent reminderListIntent = new Intent(this, ReminderListActivity.class);
+                reminderListIntent.putExtra("name", eventName);
+                reminderListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(reminderListIntent);
+                finish();
+
                 break;
             }
 
