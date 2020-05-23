@@ -55,6 +55,7 @@ import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.ui.reminder.ReminderListActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.EventUtil;
 import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
@@ -589,87 +590,49 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void share() {
-        final String nameFinal = binding.eventDetailEventName.getText().toString().trim();
-        final String detailFinal = binding.eventDetailDetail.getText().toString().trim();
-        final Date startDateFinal = startDate;
-        final Date endDateFinal = endDate;
-        final String[] locationText = binding.eventDetailLocation.getText()
-                .toString()
-                .trim()
-                .split(",");
+        Event event = new Event();
 
-        GeoPoint location;
-
-        try {
-            location = new GeoPoint(
-                    Double.parseDouble(locationText[0]),
-                    Double.parseDouble(locationText[1])
-            );
-        } catch (Exception e) {
-            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
-            binding.eventDetailLocation.requestFocus();
-            return;
-        }
-
-        final GeoPoint locationFinal = location;
-
-        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
-        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
-        final String typeFinal = binding.eventDetailType.getText().toString().trim();
+        final String name = binding.eventDetailEventName.getText().toString().trim();
 
         if (originalEventName == null) {
-            originalEventName = nameFinal;
+            originalEventName = name;
         }
 
-        if (TextUtils.isEmpty(nameFinal)) {
+        if (TextUtils.isEmpty(name)) {
             binding.eventDetailEventName.setError(getString(R.string.field_empty_message));
             binding.eventDetailEventName.requestFocus();
             return;
         }
 
-        if (TextUtils.isEmpty(detailFinal)) {
+        event.setName(name);
+
+        final String detail = binding.eventDetailDetail.getText().toString().trim();
+
+        if (TextUtils.isEmpty(detail)) {
             binding.eventDetailDetail.setError(getString(R.string.field_empty_message));
             binding.eventDetailDetail.requestFocus();
             return;
         }
 
-        if (startDateFinal == null) {
-            binding.eventDetailStartDate.setError(getString(R.string.field_empty_message));
-            binding.eventDetailStartDate.requestFocus();
+        event.setDetail(detail);
+        event.setStartDate(startDate);
+        event.setEndDate(endDate);
+
+        GeoPoint location = EventUtil.getLocationFromText(
+                binding.eventDetailLocation.getText().toString()
+        );
+
+        if (location == null) {
+            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
+            binding.eventDetailLocation.requestFocus();
             return;
         }
 
-        if (endDateFinal == null) {
-            binding.eventDetailEndDate.setError(getString(R.string.field_empty_message));
-            binding.eventDetailEndDate.requestFocus();
-            return;
-        }
+        event.setLocation(location);
 
-        if (TextUtils.isEmpty(reminderFreqFinal)) {
-            return;
-        }
-
-        if (TextUtils.isEmpty(reminderTypeFinal)) {
-            return;
-        }
-
-        if (TextUtils.isEmpty(typeFinal)) {
-            binding.eventDetailType.setError(getString(R.string.field_empty_message));
-            binding.eventDetailType.requestFocus();
-            return;
-        }
-
-        DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale);
-        final String locationShareText =
-                "[" + locationFinal.getLatitude() + ", " + locationFinal.getLongitude() + "]";
-
-        String message = getString(R.string.event_share_event_name) + nameFinal + "\n";
-        message += getString(R.string.event_share_event_detail) + detailFinal + "\n";
-        message += getString(R.string.event_share_event_start_date) + df.format(startDateFinal) + "\n";
-        message += getString(R.string.event_share_event_end_date) + df.format(endDateFinal) + "\n";
-        message += getString(R.string.event_share_location) + locationShareText + "\n";
-
+        String message = EventUtil.getShareableEventMessage(this, mLocale, event);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
         shareIntent.setType("text/plain");
         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
         startActivity(shareIntent);
