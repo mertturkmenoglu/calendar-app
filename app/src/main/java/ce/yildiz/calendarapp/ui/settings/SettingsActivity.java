@@ -138,6 +138,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void save() {
+        binding.settingsSaveButton.setClickable(false);
+
         final String appThemeLast = (String) binding.settingsAppThemeSpinner.getSelectedItem();
         final String freqLast = (String) binding.settingsDefaultReminderFrequencySpinner.getSelectedItem();
         final String soundLast = binding.settingsDefaultSound.getText().toString().trim();
@@ -154,8 +156,11 @@ public class SettingsActivity extends AppCompatActivity {
                     userId,
                     appThemeLast
             );
+
             Toast.makeText(SettingsActivity.this,
                     R.string.update_ok_message, Toast.LENGTH_SHORT).show();
+
+            binding.settingsSaveButton.setClickable(true);
 
             Intent mainIntent = new Intent(SettingsActivity.this,
                     MainActivity.class);
@@ -164,6 +169,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         result.addOnFailureListener(e -> {
+            binding.settingsSaveButton.setClickable(true);
             Toast.makeText(this, R.string.update_error_message, Toast.LENGTH_SHORT).show();
         });
     }
