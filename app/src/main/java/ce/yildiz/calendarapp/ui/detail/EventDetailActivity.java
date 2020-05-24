@@ -115,8 +115,6 @@ public class EventDetailActivity extends AppCompatActivity {
 
         binding.eventDetailLocationButton.setOnClickListener(v -> getLocation());
 
-        binding.eventDetailRemindersButton.setOnClickListener(v -> openReminders());
-
         binding.eventDetailBackFab.setOnClickListener(v -> {
             Intent mainIntent = new Intent(this, MainActivity.class);
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -137,6 +135,11 @@ public class EventDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.event_menu_reminders: {
+                openReminders();
+                break;
+            }
+
             case R.id.event_menu_delete: {
                 if (originalEventName != null) {
                     delete();

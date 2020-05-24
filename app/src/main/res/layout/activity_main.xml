@@ -21,7 +21,6 @@
         android:id="@+id/main_email_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:fontFamily="@font/montserrat"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="bold"
@@ -44,7 +43,7 @@
 
     <Button
         android:id="@+id/main_weekly_plan_button"
-        android:layout_width="175dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
@@ -59,7 +58,7 @@
 
     <Button
         android:id="@+id/main_monthly_plan_button"
-        android:layout_width="175dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
