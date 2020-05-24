@@ -6,25 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/main_horizontal_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/main_horizontal_end_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="?attr/actionBarSize" />
+
     <ImageView
         android:id="@+id/main_user_picture"
         android:layout_width="125dp"
         android:layout_height="125dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/profile_picture_desc"
-        app:layout_constraintBottom_toTopOf="@id/main_email_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_horizontal_guideline"
         tools:src="@drawable/ic_person_holo_purple_24dp" />
 
     <TextView
         android:id="@+id/main_email_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/montserrat"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/calendar_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_user_picture"
@@ -34,31 +49,32 @@
         android:id="@+id/calendar_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:dateTextAppearance="@style/CalenderViewDateCustomText"
         android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
-        app:layout_constraintBottom_toTopOf="@id/main_weekly_plan_button"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_email_text" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_email_text"/>
 
     <Button
         android:id="@+id/main_weekly_plan_button"
-        android:layout_width="wrap_content"
+        android:layout_width="128dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
         android:text="@string/weekly_plan"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/gray"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/main_monthly_plan_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calendar_view" />
+        app:layout_constraintBottom_toTopOf="@id/main_horizontal_end_guideline" />
 
     <Button
         android:id="@+id/main_monthly_plan_button"
-        android:layout_width="wrap_content"
+        android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
