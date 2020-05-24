@@ -391,6 +391,13 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @SuppressWarnings("CodeBlock2Expr")
     private void save() {
+        if (startDate.after(endDate)) {
+            Toast.makeText(this,
+                    R.string.event_date_err_message, Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
         final String nameFinal = binding.eventDetailEventName.getText().toString().trim();
         final String detailFinal = binding.eventDetailDetail.getText().toString().trim();
         final Date startDateFinal = startDate;
@@ -504,6 +511,13 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void update() {
+        if (startDate.after(endDate)) {
+            Toast.makeText(this,
+                    R.string.event_date_err_message, Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
         final String nameFinal = binding.eventDetailEventName.getText().toString().trim();
         final String detailFinal = binding.eventDetailDetail.getText().toString().trim();
         final Date startDateFinal = startDate;
