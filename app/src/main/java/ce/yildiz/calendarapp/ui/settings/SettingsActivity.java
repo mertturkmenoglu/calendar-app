@@ -70,6 +70,12 @@ public class SettingsActivity extends AppCompatActivity {
         result.addOnFailureListener(e -> {
             Toast.makeText(this, R.string.login_error_message, Toast.LENGTH_SHORT).show();
         });
+
+        binding.settingsBackFab.setOnClickListener(v -> {
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        });
     }
 
     private void setContents(final DocumentSnapshot documentSnapshot) {
