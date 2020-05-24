@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,8 +104,14 @@ public class ReminderListActivity extends AppCompatActivity {
             startActivity(reminderDetailIntent);
         };
 
-        ReminderListAdapter adapter = new ReminderListAdapter(reminders, listener);
+        ReminderListAdapter adapter = new ReminderListAdapter(this, reminders, listener);
         binding.recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new ReminderSwipeToDeleteCallback(adapter, mEventName, mUserId)
+        );
+
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         if (reminders.isEmpty()) {
             binding.recyclerView.setVisibility(View.GONE);
