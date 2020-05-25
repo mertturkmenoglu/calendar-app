@@ -6,9 +6,12 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -56,8 +59,17 @@ public class MonthlyPlanActivity extends AppCompatActivity {
             startActivity(eventDetailIntent);
         };
 
-        EventListAdapter adapter = new EventListAdapter(events, listener);
+        EventListAdapter adapter = new EventListAdapter(this, events, listener);
         binding.monthlyRecyclerView.setAdapter(adapter);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new EventSwipeToDeleteCallback(adapter, user.getUid())
+        );
+
+        itemTouchHelper.attachToRecyclerView(binding.monthlyRecyclerView);
 
         if (events.isEmpty()) {
             binding.monthlyRecyclerView.setVisibility(View.GONE);

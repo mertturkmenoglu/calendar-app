@@ -1,12 +1,20 @@
 package ce.yildiz.calendarapp.ui.plan.adapters;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.util.List;
@@ -15,12 +23,18 @@ import java.util.Locale;
 import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.interfaces.RecyclerViewClickListener;
 import ce.yildiz.calendarapp.models.Event;
+import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.NotificationUtil;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventViewHolder> {
+    private static final String TAG = EventListAdapter.class.getSimpleName();
+
     private final List<Event> mEvents;
     private final RecyclerViewClickListener mListener;
+    private final Context mContext;
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class EventViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
         final TextView nameTV;
         final TextView detailTV;
         final TextView startDateTV;
@@ -42,7 +56,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
     }
 
-    public EventListAdapter(List<Event> events, RecyclerViewClickListener listener) {
+    public EventListAdapter(Context context, List<Event> events,
+                            RecyclerViewClickListener listener) {
+        this.mContext = context;
         this.mEvents = events;
         this.mListener = listener;
     }
@@ -72,5 +88,60 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     @Override
     public int getItemCount() {
         return mEvents.size();
+    }
+
+    public void deleteItem(int position, String userId) {
+        Event removedEvent = mEvents.remove(position);
+        notifyItemRemoved(position);
+        removeFromDatabase(removedEvent, userId);
+    }
+
+    @SuppressWarnings("CodeBlock2Expr")
+    private void removeFromDatabase(Event event, String userId) {
+        Task<QuerySnapshot> result = FirebaseFirestore.getInstance()
+                .collection(Constants.Collections.USERS)
+                .document(userId)
+                .collection(Constants.Collections.USER_EVENTS)
+                .whereEqualTo("name", event.getName())
+                .get();
+
+        result.addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                final int requestCode = documentSnapshot.getId().hashCode();
+                final String reminderType = documentSnapshot.getString(Constants.EventFields.REMINDER_TYPE);
+
+                Task<Void> deleteResult = documentSnapshot.getReference().delete();
+
+                deleteResult.addOnSuccessListener(o -> {
+                    Toast.makeText(mContext,
+                            R.string.event_delete_ok_message, Toast.LENGTH_SHORT).show();
+
+                    NotificationUtil.cancelRepeatingNotification(mContext, requestCode);
+
+                    if (reminderType == null) {
+                        Log.e(TAG, "Reminder is null");
+                        return;
+                    }
+
+                    if (reminderType.equals(Constants.ReminderTypes.SOUND)) {
+                        NotificationUtil.cancelSound(mContext, requestCode);
+                    } else if (reminderType.equals(Constants.ReminderTypes.VIBRATION)) {
+                        NotificationUtil.cancelVibration(mContext, requestCode);
+                    } else {
+                        Log.e(TAG, "Unknown reminder type");
+                    }
+                });
+
+                deleteResult.addOnFailureListener(e -> {
+                    Toast.makeText(mContext,
+                            R.string.event_delete_error_message, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+
+        result.addOnFailureListener(e -> {
+            Toast.makeText(mContext,
+                    R.string.event_delete_error_message, Toast.LENGTH_SHORT).show();
+        });
     }
 }
