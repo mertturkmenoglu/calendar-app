@@ -5,6 +5,8 @@ public final class Constants {
     @SuppressWarnings("WeakerAccess")
     public static final String IMAGE_BASE_URL = "https://github.com/";
     @SuppressWarnings("WeakerAccess")
+    public static final String MAP_BASE_URL = "https://www.google.com/maps/search/?api=1&query=";
+    @SuppressWarnings("WeakerAccess")
     public static final String IMAGE_EXTENSION = "png";
     public static final String DEFAULT_SOUND = "";
     public static final String DEFAULT_REMINDER_FREQUENCY = ReminderFrequencies.DAILY;

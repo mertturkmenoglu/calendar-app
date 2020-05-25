@@ -58,6 +58,7 @@ import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.EventUtil;
 import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
+import ce.yildiz.calendarapp.util.StringUtil;
 
 @SuppressWarnings("deprecation")
 public class EventDetailActivity extends AppCompatActivity {
@@ -114,6 +115,8 @@ public class EventDetailActivity extends AppCompatActivity {
         binding.eventDetailChangeEndDateButton.setOnClickListener(v -> changeEndDate());
 
         binding.eventDetailLocationButton.setOnClickListener(v -> getLocation());
+
+        binding.eventDetailLocationShareButton.setOnClickListener(v -> shareLocation());
 
         binding.eventDetailBackFab.setOnClickListener(v -> {
             Intent mainIntent = new Intent(this, MainActivity.class);
@@ -746,6 +749,31 @@ public class EventDetailActivity extends AppCompatActivity {
                     + location.getLongitude();
             binding.eventDetailLocation.setText(locationText);
         });
+    }
+
+    private void shareLocation() {
+        String locationText = binding.eventDetailLocation.getText().toString().trim();
+
+        if (TextUtils.isEmpty(locationText)) {
+            binding.eventDetailLocation.setError(getString(R.string.field_empty_message));
+            binding.eventDetailLocation.requestFocus();
+            return;
+        }
+
+        GeoPoint location = EventUtil.getLocationFromText(locationText);
+
+        if (location == null) {
+            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
+            binding.eventDetailLocation.requestFocus();
+            return;
+        }
+
+        Intent mapIntent = new Intent(Intent.ACTION_SEND);
+
+        mapIntent.setType("text/plain");
+        mapIntent.putExtra(Intent.EXTRA_TEXT, StringUtil.getLocationShareUriString(location));
+
+        startActivity(Intent.createChooser(mapIntent, getString(R.string.share_location)));
     }
 
     private boolean checkLocationPermissions() {

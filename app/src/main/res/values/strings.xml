@@ -120,6 +120,7 @@
     <string name="reminder_date_err_message">Reminder date is invalid</string>
     <string name="event_date_err_message">Event date is invalid</string>
     <string name="change">Change</string>
+    <string name="share_location">Share Location</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>
