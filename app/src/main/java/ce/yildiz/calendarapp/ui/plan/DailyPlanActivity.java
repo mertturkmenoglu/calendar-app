@@ -6,9 +6,12 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import ce.yildiz.calendarapp.models.Event;
 import ce.yildiz.calendarapp.ui.detail.EventDetailActivity;
 import ce.yildiz.calendarapp.ui.plan.adapters.EventListAdapter;
 import ce.yildiz.calendarapp.ui.plan.viewmodels.DailyPlanActivityViewModel;
+import ce.yildiz.calendarapp.ui.reminder.ReminderSwipeToDeleteCallback;
 import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
@@ -77,8 +81,17 @@ public class DailyPlanActivity extends AppCompatActivity {
             startActivity(eventDetailIntent);
         };
 
-        EventListAdapter adapter = new EventListAdapter(events, listener);
+        EventListAdapter adapter = new EventListAdapter(this, events, listener);
         binding.recyclerView.setAdapter(adapter);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new EventSwipeToDeleteCallback(adapter, user.getUid())
+        );
+
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         if (events.isEmpty()) {
             binding.recyclerView.setVisibility(View.GONE);
