@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(MainActivity.this)
                     .load(pictureURL)
                     .override(125, 125)
+                    .apply(new RequestOptions().circleCrop())
                     .placeholder(R.drawable.ic_person_holo_purple_24dp)
                     .error(R.drawable.ic_adb_black_24dp)
                     .into(binding.mainUserPicture);
@@ -83,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(dailyPlanIntent);
         });
 
-        binding.mainWeeklyPlanButton.setOnClickListener(v -> {
+        binding.mainWeeklyPlanText.setOnClickListener(v -> {
             Intent weeklyPlanIntent = new Intent(MainActivity.this, WeeklyPlanActivity.class);
             startActivity(weeklyPlanIntent);
         });
 
-        binding.mainMonthlyPlanButton.setOnClickListener(v -> {
+        binding.mainMonthlyPlanText.setOnClickListener(v -> {
             Intent monthlyPlanIntent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
             startActivity(monthlyPlanIntent);
         });
