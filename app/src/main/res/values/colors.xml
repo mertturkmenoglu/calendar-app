@@ -7,6 +7,6 @@
     <color name="darkPrimary">#FFD600</color>
     <color name="darkPrimaryDark">#DAB90C</color>
     <color name="colorAccent2">@android:color/holo_purple</color>
-    <color name="avgBackground">#8C8888</color>
+    <color name="card_view_background">#FFFFFF</color>
     <color name="gray">#707070</color>
 </resources>

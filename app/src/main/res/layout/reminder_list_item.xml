@@ -13,26 +13,27 @@
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:elevation="@dimen/list_item_card_view_elevation"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/gray">
+        android:background="@color/card_view_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray">
+            android:background="@color/card_view_background">
 
             <TextView
                 android:id="@+id/reminder_list_item_reminder_date"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/gray"
+                android:background="@color/card_view_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/darkPrimary"
+                android:textColor="@color/gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="REMINDER"

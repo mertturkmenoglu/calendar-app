@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="2dp"
     android:orientation="vertical">
 
@@ -15,58 +15,59 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/darkPrimary"
+        android:elevation="@dimen/list_item_card_view_elevation"
         android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:background="@color/darkPrimary">
+        android:paddingEnd="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray">
+            android:background="@color/card_view_background">
 
             <TextView
                 android:id="@+id/event_list_item_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/gray"
+                android:background="@color/card_view_background"
                 android:fontFamily="@font/montserrat"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
                 android:padding="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/gray"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                tools:text="NAME"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/event_list_item_start_date"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/event_list_item_start_date"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="NAME" />
 
             <TextView
                 android:id="@+id/event_list_item_detail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/gray"
-                android:padding="8dp"
-                android:textStyle="italic"
+                android:background="@color/card_view_background"
                 android:fontFamily="@font/montserrat"
-                android:textColor="@android:color/white"
-                tools:text="DETAIL"
-                app:layout_constraintTop_toBottomOf="@id/event_list_item_name"
+                android:padding="8dp"
+                android:textColor="@android:color/black"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toStartOf="@id/event_list_item_start_date"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/event_list_item_start_date" />
+                app:layout_constraintTop_toBottomOf="@id/event_list_item_name"
+                tools:text="DETAIL" />
 
             <TextView
                 android:id="@+id/event_list_item_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/gray"
-                android:fontFamily="@font/montserrat"
-                android:textColor="@color/darkPrimary"
                 android:layout_marginEnd="8dp"
+                android:background="@color/card_view_background"
+                android:fontFamily="@font/montserrat"
                 android:padding="8dp"
-                tools:text="START DATE"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="START DATE" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
