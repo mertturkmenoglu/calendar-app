@@ -539,6 +539,18 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void update() {
+        if (startDate == null) {
+            binding.eventDetailStartDate.setError(getString(R.string.field_empty_message));
+            binding.eventDetailStartDate.requestFocus();
+            return;
+        }
+
+        if (endDate == null) {
+            binding.eventDetailEndDate.setError(getString(R.string.field_empty_message));
+            binding.eventDetailEndDate.requestFocus();
+            return;
+        }
+
         if (startDate.after(endDate)) {
             Toast.makeText(this,
                     R.string.event_date_err_message, Toast.LENGTH_SHORT).show();
@@ -546,64 +558,45 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        final String nameFinal = binding.eventDetailEventName.getText().toString().trim();
-        final String detailFinal = binding.eventDetailDetail.getText().toString().trim();
-        final Date startDateFinal = startDate;
-        final Date endDateFinal = endDate;
-        final String[] locationText = binding.eventDetailLocation.getText()
-                .toString()
-                .trim()
-                .split(",");
+        final String name = binding.eventDetailEventName.getText().toString().trim();
 
-        GeoPoint location;
-
-        try {
-            location = new GeoPoint(
-                    Double.parseDouble(locationText[0]),
-                    Double.parseDouble(locationText[1])
-            );
-        } catch (Exception e) {
-            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
-            binding.eventDetailLocation.requestFocus();
-            return;
-        }
-
-        final GeoPoint locationFinal = location;
-        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
-        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
-        final String typeFinal = binding.eventDetailType.getText().toString().trim();
-
-        if (TextUtils.isEmpty(nameFinal)) {
+        if (TextUtils.isEmpty(name)) {
             binding.eventDetailEventName.setError(getString(R.string.field_empty_message));
             binding.eventDetailEventName.requestFocus();
             return;
         }
 
-        if (TextUtils.isEmpty(detailFinal)) {
+        final String detail = binding.eventDetailDetail.getText().toString().trim();
+
+        if (TextUtils.isEmpty(detail)) {
             binding.eventDetailDetail.setError(getString(R.string.field_empty_message));
             binding.eventDetailDetail.requestFocus();
             return;
         }
 
-        if (startDateFinal == null) {
-            binding.eventDetailStartDate.setError(getString(R.string.field_empty_message));
-            binding.eventDetailStartDate.requestFocus();
+        GeoPoint location = EventUtil.getLocationFromText(
+                binding.eventDetailLocation.getText().toString()
+        );
+
+        if (location == null) {
+            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
+            binding.eventDetailLocation.requestFocus();
             return;
         }
 
-        if (endDateFinal == null) {
-            binding.eventDetailEndDate.setError(getString(R.string.field_empty_message));
-            binding.eventDetailEndDate.requestFocus();
-            return;
-        }
+        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
 
         if (TextUtils.isEmpty(reminderFreqFinal)) {
             return;
         }
 
+        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
+
         if (TextUtils.isEmpty(reminderTypeFinal)) {
             return;
         }
+
+        final String typeFinal = binding.eventDetailType.getText().toString().trim();
 
         if (TextUtils.isEmpty(typeFinal)) {
             binding.eventDetailType.setError(getString(R.string.field_empty_message));
@@ -622,16 +615,18 @@ public class EventDetailActivity extends AppCompatActivity {
                 if (e == null) continue;
 
                 if (e.getName() != null && e.getName().equals(originalEventName)) {
-                    s.getReference().update(
-                            Constants.EventFields.DETAIL, detailFinal,
-                            Constants.EventFields.END_DATE, endDateFinal,
-                            Constants.EventFields.LOCATION, locationFinal,
-                            Constants.EventFields.NAME, nameFinal,
+                    Task<Void> updateTask = s.getReference().update(
+                            Constants.EventFields.DETAIL, detail,
+                            Constants.EventFields.END_DATE, endDate,
+                            Constants.EventFields.LOCATION, location,
+                            Constants.EventFields.NAME, name,
                             Constants.EventFields.REMINDER_FREQ, reminderFreqFinal,
                             Constants.EventFields.REMINDER_TYPE, reminderTypeFinal,
-                            Constants.EventFields.START_DATE, startDateFinal,
+                            Constants.EventFields.START_DATE, startDate,
                             Constants.EventFields.TYPE, typeFinal
-                    ).addOnCompleteListener(task -> {
+                    );
+
+                    updateTask.addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(this,
                                     R.string.update_ok_message, Toast.LENGTH_SHORT).show();
