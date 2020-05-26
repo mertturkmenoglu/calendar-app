@@ -1,12 +1,10 @@
 package ce.yildiz.calendarapp.util;
 
+@SuppressWarnings("WeakerAccess")
 public final class Constants {
     public static final int MIN_PASSWORD_LENGTH = 6;
-    @SuppressWarnings("WeakerAccess")
     public static final String IMAGE_BASE_URL = "https://github.com/";
-    @SuppressWarnings("WeakerAccess")
     public static final String MAP_BASE_URL = "https://www.google.com/maps/search/?api=1&query=";
-    @SuppressWarnings("WeakerAccess")
     public static final String IMAGE_EXTENSION = "png";
     public static final String DEFAULT_SOUND = "";
     public static final String DEFAULT_REMINDER_FREQUENCY = ReminderFrequencies.DAILY;
@@ -48,20 +46,17 @@ public final class Constants {
     @SuppressWarnings("unused")
     public static final long ONE_DAY_IN_MILLIS = 1000L * 60 * 60 * 24;
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
     public static final class ReminderFrequencies {
         public static final String DAILY = "Daily";
         public static final String WEEKLY = "Weekly";
         public static final String MONTHLY = "Monthly";
     }
 
-    @SuppressWarnings("unused")
     public static final class ReminderTypes {
         public static final String VIBRATION = "Vibration";
         public static final String SOUND = "Sound";
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
     public static final class AppThemes {
         public static final String DARK = "Dark";
         public static final String LIGHT = "Light";
