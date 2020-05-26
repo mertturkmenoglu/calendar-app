@@ -31,8 +31,14 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         Typeface tf = ResourcesCompat.getFont(this, R.font.montserrat);
 
-        config.getFooterTextView().setTextAppearance(android.R.style.TextAppearance_Material_Body1);
-        config.getAfterLogoTextView().setTextAppearance(android.R.style.TextAppearance_Material_Body1);
+        config.getFooterTextView().setTextAppearance(
+                android.R.style.TextAppearance_Material_Body1
+        );
+
+        config.getAfterLogoTextView().setTextAppearance(
+                android.R.style.TextAppearance_Material_Body1
+        );
+
         config.getFooterTextView().setTypeface(tf);
         config.getAfterLogoTextView().setTypeface(tf);
 
