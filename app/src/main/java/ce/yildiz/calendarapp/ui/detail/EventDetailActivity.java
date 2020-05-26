@@ -75,7 +75,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private String mData;
 
     private FusedLocationProviderClient mFusedLocationClient;
-    private Locale mLocale = new Locale("tr", "TR");
+    private Locale mLocale = new Locale(Constants.LOCALE_LANGUAGE, Constants.LOCALE_COUNTRY);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

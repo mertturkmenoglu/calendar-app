@@ -74,7 +74,7 @@ public class ReminderListAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
-        final Locale locale = new Locale("tr", "TR");
+        final Locale locale = new Locale(Constants.LOCALE_LANGUAGE, Constants.LOCALE_COUNTRY);
         final Date date = mReminders.get(position);
         final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, locale)
                 .format(date.getTime());

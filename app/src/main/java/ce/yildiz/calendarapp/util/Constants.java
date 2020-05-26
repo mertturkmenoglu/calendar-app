@@ -13,6 +13,9 @@ public final class Constants {
     public static final int SPLASH_SCREEN_TIMEOUT_MILLIS = 1000;
     public static final int PERMISSION_ID = 44;
 
+    public static final String LOCALE_LANGUAGE = "en";
+    public static final String LOCALE_COUNTRY = "UK";
+
     public static final class Collections {
         public static final String USERS = "Users";
         public static final String USER_EVENTS = "Events";

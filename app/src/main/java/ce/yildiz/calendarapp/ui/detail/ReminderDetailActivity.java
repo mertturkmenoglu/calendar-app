@@ -71,7 +71,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
         userId = i.getStringExtra("userId");
         String eventJsonString = i.getStringExtra("event");
 
-        final Locale locale = new Locale("en", "UK");
+        final Locale locale = new Locale(Constants.LOCALE_LANGUAGE, Constants.LOCALE_COUNTRY);
 
         if (eventName == null || userId == null || eventJsonString == null) return;
 

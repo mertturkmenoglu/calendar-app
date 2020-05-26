@@ -76,7 +76,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, final int position) {
         Event event = mEvents.get(position);
-        final Locale locale = new Locale("tr", "TR");
+        final Locale locale = new Locale(Constants.LOCALE_LANGUAGE, Constants.LOCALE_COUNTRY);
         final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, locale)
                 .format(event.getStartDate());
 
