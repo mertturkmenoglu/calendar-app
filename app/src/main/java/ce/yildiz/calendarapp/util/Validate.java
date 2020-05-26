@@ -20,4 +20,8 @@ public final class Validate {
     public static boolean validatePassword(@NonNull String password) {
         return !TextUtils.isEmpty(password) && !(password.length() < Constants.MIN_PASSWORD_LENGTH);
     }
+
+    public static boolean validateGithubUsername(@NonNull String username) {
+        return !TextUtils.isEmpty(username);
+    }
 }

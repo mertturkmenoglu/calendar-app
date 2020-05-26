@@ -2,7 +2,6 @@ package ce.yildiz.calendarapp.ui.register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +22,7 @@ import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityRegisterBinding;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.util.Constants;
+import ce.yildiz.calendarapp.util.Validate;
 
 @SuppressWarnings("CodeBlock2Expr")
 public class RegisterActivity extends AppCompatActivity {
@@ -40,8 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        setContentView(root);
+        setContentView(binding.getRoot());
 
         binding.signUpProgressBar.setVisibility(View.GONE);
 
@@ -61,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         Task<AuthResult> result = mAuth.createUserWithEmailAndPassword(mEmail, mPassword);
 
         result.addOnSuccessListener(authResult -> {
-            mAuth.signInWithEmailAndPassword(mEmail, mPassword).addOnSuccessListener(authResult1 -> {
+            mAuth.signInWithEmailAndPassword(mEmail, mPassword).addOnSuccessListener(res -> {
                 saveToDatabase();
 
                 binding.signUpProgressBar.setVisibility(View.GONE);
@@ -84,24 +83,26 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         String userId = mAuth.getCurrentUser().getUid();
-        DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
+        DocumentReference documentReference = db.collection(Constants.Collections.USERS)
+                .document(userId);
 
         Map<String, Object> user = new HashMap<>();
         user.put(Constants.UserFields.EMAIL, mEmail);
         user.put(Constants.UserFields.GITHUB_USERNAME, mGithubUsername);
         user.put(Constants.UserFields.DEFAULT_SOUND, Constants.DEFAULT_SOUND);
-        user.put(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY, Constants.DEFAULT_REMINDER_FREQUENCY);
+        user.put(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY,
+                Constants.DEFAULT_REMINDER_FREQUENCY);
         user.put(Constants.UserFields.APP_THEME, Constants.AppThemes.DARK);
 
         Task<Void> result = documentReference.set(user);
 
         result.addOnSuccessListener(o -> {
-            Toast.makeText(RegisterActivity.this,
+            Toast.makeText(this,
                     R.string.registration_ok_message, Toast.LENGTH_SHORT).show();
         });
 
         result.addOnFailureListener(e -> {
-            Toast.makeText(RegisterActivity.this,
+            Toast.makeText(this,
                     R.string.registration_error_message, Toast.LENGTH_SHORT).show();
         });
 
@@ -110,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
         documentReference.collection(Constants.Collections.USER_EVENTS)
                 .document().set(events)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(RegisterActivity.this,
+                    Toast.makeText(this,
                             R.string.registration_error_message, Toast.LENGTH_SHORT).show();
                 });
     }
@@ -129,22 +130,17 @@ public class RegisterActivity extends AppCompatActivity {
         mPassword = passwordEditText.getText().toString().trim();
         mGithubUsername = githubUsernameEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(mEmail)) {
+        if (Validate.validateEmail(mEmail)) {
             binding.registerEmail.setError(getString(R.string.field_empty_message));
             return false;
         }
 
-        if (TextUtils.isEmpty(mPassword)) {
-            binding.registerPassword.setError(getString(R.string.field_empty_message));
-            return false;
-        }
-
-        if (mPassword.length() < Constants.MIN_PASSWORD_LENGTH) {
+        if (Validate.validatePassword(mPassword)) {
             binding.registerPassword.setError(getString(R.string.password_short_error));
             return false;
         }
 
-        if (TextUtils.isEmpty(mGithubUsername)) {
+        if (Validate.validateGithubUsername(mGithubUsername)) {
             binding.registerGithubUsername.setError(getString(R.string.field_empty_message));
             return false;
         }
