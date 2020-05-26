@@ -13,6 +13,7 @@ import ce.yildiz.calendarapp.services.NotificationAlertReceiver;
 import ce.yildiz.calendarapp.services.SoundAlertReceiver;
 import ce.yildiz.calendarapp.services.VibrationAlertReceiver;
 
+@SuppressWarnings("unused")
 public class NotificationUtil {
     public static void startRepeatingNotification(Context ctx, Date d, int requestCode,
                                                   String title, String content,
@@ -69,8 +70,8 @@ public class NotificationUtil {
         alarmManager.cancel(pendingIntent);
     }
 
-    @SuppressWarnings("unused")
-    public static void startNotification(Context ctx, Date d, int requestCode, String title, String content) {
+    public static void startNotification(Context ctx, Date d, int requestCode, String title,
+                                         String content) {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ctx, NotificationAlertReceiver.class);
         intent.putExtra("title", title);
@@ -91,7 +92,6 @@ public class NotificationUtil {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, d.getTime(), pendingIntent);
     }
 
-    @SuppressWarnings("unused")
     public static void cancelNotification(Context ctx, int requestCode) {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ctx, NotificationAlertReceiver.class);
