@@ -94,12 +94,6 @@ public class EventDetailActivity extends AppCompatActivity {
 
         mData = i.getStringExtra("event");
 
-        if (mData != null) {
-            loadData(mData);
-        } else {
-            createViews();
-        }
-
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -109,6 +103,12 @@ public class EventDetailActivity extends AppCompatActivity {
         }
 
         userId = mAuth.getCurrentUser().getUid();
+
+        if (mData != null) {
+            loadData(mData);
+        } else {
+            createViews();
+        }
 
         binding.eventDetailChangeStartDateButton.setOnClickListener(v -> changeStartDate());
 
@@ -259,6 +259,23 @@ public class EventDetailActivity extends AppCompatActivity {
 
         reminderTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.eventDetailReminderType.setAdapter(reminderTypeAdapter);
+
+        Task<DocumentSnapshot> result = db.collection(Constants.Collections.USERS)
+                .document(userId)
+                .get();
+
+        result.addOnSuccessListener(documentSnapshot -> {
+            final String defaultFreq = documentSnapshot.getString(
+                    Constants.UserFields.DEFAULT_REMINDER_FREQUENCY
+            );
+
+            if (defaultFreq != null) {
+                List<String> freqChoices = Arrays.asList(
+                        getResources().getStringArray(R.array.reminder_freq)
+                );
+                binding.eventDetailReminderFreq.setSelection(freqChoices.indexOf(defaultFreq));
+            }
+        });
     }
 
     private void changeStartDate() {
