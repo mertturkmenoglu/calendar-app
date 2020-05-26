@@ -31,6 +31,11 @@ Ensure you have met the following requirements:
     * Select your project.
     * Follow the Firebase guide to **link your project with Android Studio**.
     * Add your `google-services.json` file to your `app` module.
+* You have to enable `Email/Password` sign-in provied under `Authentication -> Sign-in Method -> Sign-in providers`.
+* You have to enable `Cloud Firestore` database.
+* You have to allow write/read operations to database. You can set these rules from `Database -> Rules`.
+* You have to have a `Users` collection inside your database root.
+* Inside `Users` collection, every document should have a subcollection named `Events`.
 # Libraries and Dependencies
 * [Firebase Auth](https://firebase.google.com/)
 * [Firebase Firestore](https://firebase.google.com/)
