@@ -1,5 +1,7 @@
 # Introduction to Mobile Programming Semester Project - Calendar App
 ***
+* Video link: https://www.youtube.com/watch?v=zxYeMyc-8iE
+***
 # Table of Contents
 * [Description](#description)
 * [Prerequisites](#prerequisites)
