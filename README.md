@@ -1,13 +1,14 @@
 # Introduction to Mobile Programming Semester Project - Calendar App
 ***
 # Table of Contents
-* [Description](#Description)
-* [Prerequisites](#Prerequisites)
+* [Description](#description)
+* [Prerequisites](#prerequisites)
 * [Installing the Project](#installing-the-project)
-* [Contributing](#Contributing)
-* [Authors](#Authors)
-* [Contact](#Contact)
-* [License](#License)
+* [Libraries and Dependencies](#libraries-and-dependencies)
+* [Contributing](#contributing)
+* [Authors](#authors)
+* [Contact](#contact)
+* [License](#license)
 ***
 # Description
 * This repository contains my **Introduction to Mobile Programming** semester project.
@@ -30,6 +31,19 @@ Ensure you have met the following requirements:
     * Select your project.
     * Follow the Firebase guide to **link your project with Android Studio**.
     * Add your `google-services.json` file to your `app` module.
+# Libraries and Dependencies
+* [Firebase Auth](https://firebase.google.com/)
+* [Firebase Firestore](https://firebase.google.com/)
+* [Firebase Crashlytics](https://firebase.google.com/)
+* [Firebase Analytics](https://firebase.google.com/)
+* [Android Material](https://material.io/develop/android/docs/getting-started/)
+* [Android ConstraintLayout](https://developer.android.com/jetpack/androidx/releases/constraintlayout)
+* [Glide](https://github.com/bumptech/glide)
+* [Easy Splash Screen](https://github.com/pantrif/EasySplashScreen)
+* [Google Play Services](https://developers.google.com/android/guides/setup)
+* [Androidx Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle)
+* [Androidx Recyclerview](https://developer.android.com/jetpack/androidx/releases/recyclerview)
+* [Androidx Cardview](https://developer.android.com/jetpack/androidx/releases/cardview)
 # Contributing
 See the `CONTRIBUTING.md` file.
 # Authors
