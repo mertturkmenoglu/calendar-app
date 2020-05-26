@@ -3,7 +3,9 @@ package ce.yildiz.calendarapp.ui.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,8 @@ import ce.yildiz.calendarapp.util.Constants;
 
 @SuppressWarnings("CodeBlock2Expr")
 public class RegisterActivity extends AppCompatActivity {
+    private static final String TAG = RegisterActivity.class.getSimpleName();
+
     private ActivityRegisterBinding binding;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -44,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        binding.signUpButton.setOnClickListener(v -> register());
+        binding.registerButton.setOnClickListener(v -> register());
     }
 
     private void register() {
@@ -112,27 +116,36 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean fieldsCorrect() {
-        mEmail = binding.signUpEmailEt.getText().toString().trim();
-        mPassword = binding.signUpPasswordEt.getText().toString().trim();
-        mGithubUsername = binding.signUpGithubUsernameEt.getText().toString().trim();
+        final EditText emailEditText = binding.registerEmail.getEditText();
+        final EditText passwordEditText = binding.registerPassword.getEditText();
+        final EditText githubUsernameEditText = binding.registerGithubUsername.getEditText();
+
+        if (emailEditText == null || passwordEditText == null || githubUsernameEditText == null) {
+            Log.e(TAG, "Views not found");
+            return false;
+        }
+
+        mEmail = emailEditText.getText().toString().trim();
+        mPassword = passwordEditText.getText().toString().trim();
+        mGithubUsername = githubUsernameEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(mEmail)) {
-            binding.signUpEmailEt.setError(getString(R.string.field_empty_message));
+            binding.registerEmail.setError(getString(R.string.field_empty_message));
             return false;
         }
 
         if (TextUtils.isEmpty(mPassword)) {
-            binding.signUpPasswordEt.setError(getString(R.string.field_empty_message));
+            binding.registerPassword.setError(getString(R.string.field_empty_message));
             return false;
         }
 
         if (mPassword.length() < Constants.MIN_PASSWORD_LENGTH) {
-            binding.signUpPasswordEt.setError(getString(R.string.password_short_error));
+            binding.registerPassword.setError(getString(R.string.password_short_error));
             return false;
         }
 
         if (TextUtils.isEmpty(mGithubUsername)) {
-            binding.signUpGithubUsernameEt.setError(getString(R.string.field_empty_message));
+            binding.registerGithubUsername.setError(getString(R.string.field_empty_message));
             return false;
         }
 

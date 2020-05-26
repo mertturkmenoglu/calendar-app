@@ -26,7 +26,7 @@
     <string name="email_hint">Enter your e-mail</string>
     <string name="username_text">Username</string>
     <string name="username_hint">Enter your username</string>
-    <string name="image_url">GitHub Username:</string>
+    <string name="github_username">GitHub Username</string>
     <string name="image_url_hint">Enter your GitHub username</string>
     <string name="list_users">LIST USERS</string>
     <string name="profile_picture_desc">Profile picture</string>
