@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/settings_vertical_end_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.95" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/settings_horizontal_guideline"
@@ -28,22 +28,53 @@
         app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/settings_horizontal_separation_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/settings_horizontal_end_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95" />
 
+    <ImageView
+        android:id="@+id/settings_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/login_screen_logo_desc"
+        android:src="@drawable/ic_event_accent_96dp"
+        app:layout_constraintBottom_toTopOf="@id/settings_app_name"
+        app:layout_constraintEnd_toEndOf="@id/settings_vertical_end_guideline"
+        app:layout_constraintStart_toStartOf="@id/settings_vertical_guideline"
+        app:layout_constraintTop_toTopOf="@id/settings_horizontal_guideline" />
+
+    <TextView
+        android:id="@+id/settings_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat"
+        android:text="@string/app_name"
+        android:textColor="@color/darkPrimary"
+        app:layout_constraintEnd_toEndOf="@id/settings_vertical_end_guideline"
+        app:layout_constraintStart_toStartOf="@id/settings_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/settings_logo" />
+
     <TextView
         android:id="@+id/settings_default_sound_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/montserrat"
         android:text="@string/default_sound"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@id/settings_horizontal_guideline" />
+        app:layout_constraintStart_toStartOf="@id/settings_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/settings_horizontal_separation_guideline" />
 
     <EditText
         android:id="@+id/settings_default_sound"
@@ -52,88 +83,94 @@
         android:layout_marginTop="8dp"
         android:alpha="0.90"
         android:autofillHints=""
-        android:hint="@string/sound"
         android:background="@drawable/rounded_edit_text_shape"
         android:fontFamily="@font/montserrat"
+        android:hint="@string/sound"
         android:inputType="text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/secondary_text_dark"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@id/settings_default_sound_text"
-        app:layout_constraintEnd_toStartOf="@id/settings_sound_button" />
+        app:layout_constraintEnd_toStartOf="@id/settings_sound_button"
+        app:layout_constraintStart_toStartOf="@id/settings_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/settings_default_sound_text" />
 
     <Button
         android:id="@+id/settings_sound_button"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/ic_folder_accent_48dp"
-        app:layout_constraintTop_toTopOf="@id/settings_default_sound"
         app:layout_constraintBottom_toBottomOf="@id/settings_default_sound"
+        app:layout_constraintEnd_toEndOf="@id/settings_vertical_end_guideline"
         app:layout_constraintStart_toEndOf="@id/settings_default_sound"
-        app:layout_constraintEnd_toStartOf="@id/settings_vertical_end_guideline" />
+        app:layout_constraintTop_toTopOf="@id/settings_default_sound" />
 
     <TextView
         android:id="@+id/settings_default_reminder_frequency_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="32dp"
         android:fontFamily="@font/montserrat"
         android:text="@string/default_reminder_frequency"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@id/settings_default_sound"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline" />
+        app:layout_constraintStart_toStartOf="@id/settings_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/settings_default_sound" />
 
     <Spinner
         android:id="@+id/settings_default_reminder_frequency_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@id/settings_default_reminder_frequency_text" />
+        app:layout_constraintBottom_toBottomOf="@+id/settings_default_reminder_frequency_text"
+        app:layout_constraintEnd_toStartOf="@id/settings_vertical_end_guideline"
+        app:layout_constraintStart_toEndOf="@id/settings_default_reminder_frequency_text"
+        app:layout_constraintTop_toTopOf="@id/settings_default_reminder_frequency_text"
+        tools:listitem="@android:layout/simple_list_item_1" />
 
     <TextView
         android:id="@+id/settings_app_theme_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/montserrat"
         android:text="@string/app_theme"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@id/settings_default_reminder_frequency_spinner" />
+        app:layout_constraintStart_toStartOf="@id/settings_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/settings_default_reminder_frequency_text" />
 
     <Spinner
         android:id="@+id/settings_app_theme_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/settings_app_theme_text"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"/>
+        tools:listitem="@android:layout/simple_list_item_1"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_app_theme_text"
+        app:layout_constraintEnd_toEndOf="@+id/settings_default_reminder_frequency_spinner"
+        app:layout_constraintStart_toStartOf="@+id/settings_default_reminder_frequency_spinner"
+        app:layout_constraintTop_toTopOf="@id/settings_app_theme_text" />
 
     <Button
         android:id="@+id/settings_save_button"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/login_button_shape"
         android:fontFamily="@font/montserrat"
         android:text="@string/save"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/gray"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"
-        app:layout_constraintEnd_toStartOf="@id/settings_vertical_end_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settings_app_theme_spinner" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/settings_back_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_arrow_back_white_24dp"
-        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline"
-        app:layout_constraintBottom_toTopOf="@id/settings_horizontal_end_guideline" />
+        app:layout_constraintBottom_toTopOf="@id/settings_horizontal_end_guideline"
+        app:layout_constraintStart_toEndOf="@id/settings_vertical_guideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
