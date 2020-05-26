@@ -1,5 +1,7 @@
 package ce.yildiz.calendarapp.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -75,7 +77,7 @@ public class User {
         this.appTheme = appTheme;
     }
 
-    @SuppressWarnings("NullableProblems")
+    @NonNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
