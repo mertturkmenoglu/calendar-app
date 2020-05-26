@@ -36,6 +36,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            return;
+        }
+
+        final String userId = mAuth.getCurrentUser().getUid();
+
+        if (SharedPreferencesUtil.getTheme() == null) {
+            SharedPreferencesUtil.loadApplicationTheme(this, userId);
+        }
+
         if (SharedPreferencesUtil.getTheme().equals(Constants.AppThemes.DARK)) {
             setTheme(R.style.DarkTheme);
         } else {
@@ -47,17 +61,8 @@ public class MainActivity extends AppCompatActivity {
         View root = binding.getRoot();
         setContentView(root);
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-
-        if (mAuth.getCurrentUser() == null) {
-            finish();
-            return;
-        }
-
-        final String userId = mAuth.getCurrentUser().getUid();
-
-        DocumentReference documentReference = db.collection(Constants.Collections.USERS).document(userId);
+        DocumentReference documentReference = db.collection(Constants.Collections.USERS)
+                .document(userId);
         documentReference.addSnapshotListener(this, (documentSnapshot, e) -> {
             if (documentSnapshot == null) {
                 return;
