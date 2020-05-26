@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@android:color/white"
+                android:textColor="@color/darkPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="REMINDER"

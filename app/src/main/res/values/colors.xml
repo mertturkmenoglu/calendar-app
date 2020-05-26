@@ -3,10 +3,10 @@
     <color name="darkBackground">#373535</color>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#C51162</color>
     <color name="darkPrimary">#FFD600</color>
-    <color name="darkPrimaryDark">#FFD600</color>
+    <color name="darkPrimaryDark">#DAB90C</color>
     <color name="colorAccent2">@android:color/holo_purple</color>
-    <color name="avgBackground">#EFEEEE</color>
+    <color name="avgBackground">#8C8888</color>
     <color name="gray">#707070</color>
 </resources>
