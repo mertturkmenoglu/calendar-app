@@ -87,6 +87,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
             binding.reminderDetailStatusText.setText(dateText);
         } else {
             mDate = new Date();
+            mDate.setSeconds(0);
         }
 
         db = FirebaseFirestore.getInstance();
@@ -105,6 +106,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
         binding.reminderDetailTimePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> {
             mDate.setHours(hourOfDay);
             mDate.setMinutes(minute);
+            mDate.setSeconds(0);
 
             String dateText = getString(R.string.date) + " "
                     + DateFormat.getDateInstance(DateFormat.FULL, locale).format(mDate);

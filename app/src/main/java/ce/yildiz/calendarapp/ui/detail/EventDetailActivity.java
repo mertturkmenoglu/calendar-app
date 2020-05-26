@@ -240,7 +240,10 @@ public class EventDetailActivity extends AppCompatActivity {
 
     private void createViews() {
         startDate = new Date();
+        startDate.setSeconds(0);
+
         endDate = new Date();
+        endDate.setSeconds(0);
 
         ArrayAdapter<CharSequence> reminderFreqAdapter = ArrayAdapter.createFromResource(
                 this,
@@ -315,6 +318,7 @@ public class EventDetailActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener timeSetListener = (view, hour, minute) -> {
             startDate.setHours(hour);
             startDate.setMinutes(minute);
+            startDate.setSeconds(0);
 
             final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale)
                     .format(startDate);
@@ -375,6 +379,7 @@ public class EventDetailActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener timeSetListener = (view, hour, minute) -> {
             endDate.setHours(hour);
             endDate.setMinutes(minute);
+            startDate.setSeconds(0);
 
             final String formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale)
                     .format(endDate);
