@@ -1,10 +1,9 @@
 package ce.yildiz.calendarapp.services;
 
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import androidx.core.app.NotificationCompat;
 
 import ce.yildiz.calendarapp.R;
 
@@ -16,25 +15,24 @@ public class NotificationAlertReceiver extends BroadcastReceiver {
         int icon = R.drawable.web_hi_res_512;
 
         if (intent != null) {
-            String titleTemp = intent.getStringExtra("title");
-            String contentTemp = intent.getStringExtra("content");
-            int iconTemp = intent.getIntExtra("icon", -1);
-
-            if (titleTemp != null) {
-                title = titleTemp;
+            if (intent.hasExtra("title")) {
+                title = intent.getStringExtra("title");
             }
 
-            if (contentTemp != null) {
-                content = contentTemp;
+            if (intent.hasExtra("content")) {
+                content = intent.getStringExtra("content");
             }
 
-            if (iconTemp != -1) {
-                icon = iconTemp;
+            if (intent.hasExtra("icon")) {
+                icon = intent.getIntExtra("icon", -1);
             }
         }
 
         NotificationHelper notificationHelper = new NotificationHelper(context);
-        NotificationCompat.Builder nb = notificationHelper.getChannelNotification(title, content, icon);
-        notificationHelper.getManager().notify(1, nb.build());
+        Notification notification = notificationHelper
+                .getBuilder(title, content, icon)
+                .build();
+
+        notificationHelper.getManager().notify(1, notification);
     }
 }

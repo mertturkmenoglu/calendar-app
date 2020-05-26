@@ -12,21 +12,19 @@ public class SoundAlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent == null) return;
 
-        String defaultSound = intent.getStringExtra("default_sound");
-        Uri soundUri;
-
-        if (defaultSound == null) {
-            soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        } else {
-            soundUri = Uri.parse(defaultSound);
-        }
+        final Uri soundUri = (intent.hasExtra("default_sound"))
+                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                : Uri.parse(intent.getStringExtra("default_sound"));
 
         try {
             Ringtone ringtone = RingtoneManager.getRingtone(context, soundUri);
             ringtone.play();
         } catch (Exception e) {
-            Ringtone ringtone = RingtoneManager.getRingtone(context,
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            Ringtone ringtone = RingtoneManager.getRingtone(
+                    context,
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            );
+
             ringtone.play();
         }
     }
