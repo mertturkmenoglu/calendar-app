@@ -3,7 +3,9 @@ package ce.yildiz.calendarapp.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,6 +23,8 @@ import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = LoginActivity.class.getSimpleName();
+
     private ActivityLoginBinding binding;
     private FirebaseAuth mAuth;
 
@@ -62,21 +66,29 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        final String email = binding.loginLoginEt.getText().toString().trim();
-        final String password = binding.loginPasswordEt.getText().toString().trim();
+        final EditText emailEditText = binding.loginEmailInput.getEditText();
+        final EditText passwordEditText = binding.loginPasswordInput.getEditText();
+
+        if (emailEditText == null || passwordEditText == null) {
+            Log.e(TAG, "Views not found");
+            return;
+        }
+
+        final String email = emailEditText.getText().toString().trim();
+        final String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            binding.loginLoginEt.setError(getString(R.string.field_empty_message));
+            binding.loginEmailInput.setError(getString(R.string.field_empty_message));
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            binding.loginPasswordEt.setError(getString(R.string.field_empty_message));
+            binding.loginPasswordInput.setError(getString(R.string.field_empty_message));
             return;
         }
 
         if (password.length() < Constants.MIN_PASSWORD_LENGTH) {
-            binding.loginPasswordEt.setError(getString(R.string.password_short_error));
+            binding.loginPasswordInput.setError(getString(R.string.password_short_error));
             return;
         }
 

@@ -121,6 +121,7 @@
     <string name="event_date_err_message">Event date is invalid</string>
     <string name="change">Change</string>
     <string name="share_location">Share Location</string>
+    <string name="login_screen_logo_desc">Login screen logo</string>
     <string-array name="reminder_freq">
         <item>Daily</item>
         <item>Weekly</item>
