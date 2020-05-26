@@ -701,7 +701,9 @@ public class EventDetailActivity extends AppCompatActivity {
         result.addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 final int requestCode = documentSnapshot.getId().hashCode();
-                final String reminderType = documentSnapshot.getString(Constants.EventFields.REMINDER_TYPE);
+                final String reminderType = documentSnapshot.getString(
+                        Constants.EventFields.REMINDER_TYPE
+                );
 
                 Task<Void> deleteResult = documentSnapshot.getReference().delete();
 
@@ -762,8 +764,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 return;
             }
 
-            final String locationText = location.getLatitude() + ","
-                    + location.getLongitude();
+            final String locationText = location.getLatitude() + "," + location.getLongitude();
             binding.eventDetailLocation.setText(locationText);
         });
     }
