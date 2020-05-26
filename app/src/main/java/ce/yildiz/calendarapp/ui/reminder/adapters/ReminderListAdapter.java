@@ -94,7 +94,6 @@ public class ReminderListAdapter
         removeFromDatabase(removedReminder, eventName, userId);
     }
 
-    @SuppressWarnings("CodeBlock2Expr")
     private void removeFromDatabase(Date reminder, String eventName, String userId) {
         Task<QuerySnapshot> result = FirebaseFirestore.getInstance()
                 .collection(Constants.Collections.USERS)
@@ -139,6 +138,7 @@ public class ReminderListAdapter
         });
 
         result.addOnFailureListener(e -> {
+            Log.e(TAG, "Reminder delete failed", e);
             Toast.makeText(mContext,
                     R.string.reminder_delete_error_message, Toast.LENGTH_SHORT).show();
         });

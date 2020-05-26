@@ -2,7 +2,6 @@ package ce.yildiz.calendarapp.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -19,8 +18,8 @@ import ce.yildiz.calendarapp.R;
 import ce.yildiz.calendarapp.databinding.ActivityLoginBinding;
 import ce.yildiz.calendarapp.ui.main.MainActivity;
 import ce.yildiz.calendarapp.ui.register.RegisterActivity;
-import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
+import ce.yildiz.calendarapp.util.Validate;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -32,33 +31,32 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        setContentView(root);
+        setContentView(binding.getRoot());
 
         binding.loginLoginProgressBar.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
 
         // Check if user is logged in
+        // Go to MainActivity
         if (mAuth.getCurrentUser() != null) {
             SharedPreferencesUtil.loadApplicationTheme(this, mAuth.getCurrentUser().getUid());
 
-            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent mainIntent = new Intent(this, MainActivity.class);
 
             startActivity(mainIntent);
             finish();
+
             return;
         }
 
         binding.loginForgotPasswordText.setOnClickListener(v -> {
-            Intent passwordResetIntent = new Intent(LoginActivity.this,
-                    PasswordResetActivity.class);
+            Intent passwordResetIntent = new Intent(this, PasswordResetActivity.class);
             startActivity(passwordResetIntent);
         });
 
         binding.loginSignUpText.setOnClickListener(v -> {
-            Intent signUpIntent = new Intent(LoginActivity.this,
-                    RegisterActivity.class);
+            Intent signUpIntent = new Intent(this, RegisterActivity.class);
             startActivity(signUpIntent);
         });
 
@@ -77,17 +75,12 @@ public class LoginActivity extends AppCompatActivity {
         final String email = emailEditText.getText().toString().trim();
         final String password = passwordEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email)) {
+        if (!Validate.validateEmail(email)) {
             binding.loginEmailInput.setError(getString(R.string.field_empty_message));
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            binding.loginPasswordInput.setError(getString(R.string.field_empty_message));
-            return;
-        }
-
-        if (password.length() < Constants.MIN_PASSWORD_LENGTH) {
+        if (!Validate.validatePassword(password)) {
             binding.loginPasswordInput.setError(getString(R.string.password_short_error));
             return;
         }
@@ -101,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (mAuth.getCurrentUser() == null) return;
 
+            // Application theme must be set before MainActivity starts
             SharedPreferencesUtil.loadApplicationTheme(this, mAuth.getCurrentUser().getUid());
             Toast.makeText(this, R.string.login_ok_message, Toast.LENGTH_SHORT).show();
 

@@ -43,7 +43,7 @@ class NotificationHelper extends ContextWrapper {
         return mNotificationManager;
     }
 
-    public NotificationCompat.Builder getChannelNotification(String title, String content, int icon) {
+    public NotificationCompat.Builder getBuilder(String title, String content, int icon) {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(title)
                 .setContentText(content)

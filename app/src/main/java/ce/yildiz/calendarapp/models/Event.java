@@ -1,5 +1,7 @@
 package ce.yildiz.calendarapp.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
@@ -106,7 +108,7 @@ public class Event {
         this.type = type;
     }
 
-    @SuppressWarnings("NullableProblems")
+    @NonNull
     @Override
     public String toString() {
         return "Event{" +

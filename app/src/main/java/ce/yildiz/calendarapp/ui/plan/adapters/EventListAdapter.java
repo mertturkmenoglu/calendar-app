@@ -96,7 +96,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         removeFromDatabase(removedEvent, userId);
     }
 
-    @SuppressWarnings("CodeBlock2Expr")
     private void removeFromDatabase(Event event, String userId) {
         Task<QuerySnapshot> result = FirebaseFirestore.getInstance()
                 .collection(Constants.Collections.USERS)
@@ -108,7 +107,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         result.addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 final int requestCode = documentSnapshot.getId().hashCode();
-                final String reminderType = documentSnapshot.getString(Constants.EventFields.REMINDER_TYPE);
+                final String reminderType = documentSnapshot.getString(
+                        Constants.EventFields.REMINDER_TYPE
+                );
 
                 Task<Void> deleteResult = documentSnapshot.getReference().delete();
 
@@ -133,6 +134,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 });
 
                 deleteResult.addOnFailureListener(e -> {
+                    Log.e(TAG, "Event delete failed", e);
                     Toast.makeText(mContext,
                             R.string.event_delete_error_message, Toast.LENGTH_SHORT).show();
                 });
@@ -140,6 +142,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         });
 
         result.addOnFailureListener(e -> {
+            Log.e(TAG, "Event delete failed", e);
             Toast.makeText(mContext,
                     R.string.event_delete_error_message, Toast.LENGTH_SHORT).show();
         });

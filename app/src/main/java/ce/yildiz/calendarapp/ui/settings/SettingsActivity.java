@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -30,9 +29,11 @@ import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 public class SettingsActivity extends AppCompatActivity {
     public static final int RINGTONE_REQUEST_CODE = 10;
     private ActivitySettingsBinding binding;
+
     @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+
     private String userId;
 
     @Override
@@ -45,8 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        setContentView(root);
+        setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -80,7 +80,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setContents(final DocumentSnapshot documentSnapshot) {
         final String appTheme = documentSnapshot.getString(Constants.UserFields.APP_THEME);
-        final String defaultReminderFreq = documentSnapshot.getString(Constants.UserFields.DEFAULT_REMINDER_FREQUENCY);
+        final String defaultReminderFreq = documentSnapshot.getString(
+                Constants.UserFields.DEFAULT_REMINDER_FREQUENCY
+        );
         final String defaultSound = documentSnapshot.getString(Constants.UserFields.DEFAULT_SOUND);
 
         binding.settingsDefaultSound.setText(defaultSound);
@@ -94,8 +96,12 @@ public class SettingsActivity extends AppCompatActivity {
         reminderFreqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.settingsDefaultReminderFrequencySpinner.setAdapter(reminderFreqAdapter);
 
-        List<String> freqChoices = Arrays.asList(getResources().getStringArray(R.array.reminder_freq));
-        binding.settingsDefaultReminderFrequencySpinner.setSelection(freqChoices.indexOf(defaultReminderFreq));
+        List<String> freqChoices = Arrays.asList(
+                getResources().getStringArray(R.array.reminder_freq)
+        );
+        binding.settingsDefaultReminderFrequencySpinner.setSelection(
+                freqChoices.indexOf(defaultReminderFreq)
+        );
 
         ArrayAdapter<CharSequence> appThemeAdapter = ArrayAdapter.createFromResource(
                 SettingsActivity.this,
@@ -138,7 +144,9 @@ public class SettingsActivity extends AppCompatActivity {
             if (uri != null) {
                 binding.settingsDefaultSound.setText(uri.toString());
             } else {
-                binding.settingsDefaultSound.setText(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
+                binding.settingsDefaultSound.setText(
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString()
+                );
             }
         }
     }
@@ -147,7 +155,8 @@ public class SettingsActivity extends AppCompatActivity {
         binding.settingsSaveButton.setClickable(false);
 
         final String appThemeLast = (String) binding.settingsAppThemeSpinner.getSelectedItem();
-        final String freqLast = (String) binding.settingsDefaultReminderFrequencySpinner.getSelectedItem();
+        final String freqLast = (String) binding.settingsDefaultReminderFrequencySpinner
+                .getSelectedItem();
         final String soundLast = binding.settingsDefaultSound.getText().toString().trim();
 
         Task<Void> result = db.collection(Constants.Collections.USERS).document(userId).update(
@@ -168,8 +177,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             binding.settingsSaveButton.setClickable(true);
 
-            Intent mainIntent = new Intent(SettingsActivity.this,
-                    MainActivity.class);
+            Intent mainIntent = new Intent(this, MainActivity.class);
             startActivity(mainIntent);
             finish();
         });

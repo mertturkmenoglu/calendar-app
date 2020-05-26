@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ce.yildiz.calendarapp.R;
@@ -24,8 +25,7 @@ public class PasswordResetActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPasswordResetBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        setContentView(root);
+        setContentView(binding.getRoot());
 
         binding.passwordResetProgressBar.setVisibility(View.GONE);
 
@@ -45,13 +45,17 @@ public class PasswordResetActivity extends AppCompatActivity {
         final String email = emailEditText.getText().toString().trim();
         binding.passwordResetProgressBar.setVisibility(View.VISIBLE);
 
-        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(o -> {
+        Task<Void> task = mAuth.sendPasswordResetEmail(email);
+
+        task.addOnSuccessListener(o -> {
             binding.passwordResetProgressBar.setVisibility(View.GONE);
 
             Toast.makeText(this,
                     R.string.password_reset_link_send_ok_message, Toast.LENGTH_SHORT).show();
             finish();
-        }).addOnFailureListener(e -> {
+        });
+
+        task.addOnFailureListener(e -> {
             binding.passwordResetProgressBar.setVisibility(View.GONE);
 
             Toast.makeText(this,

@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -67,10 +66,12 @@ public class EventDetailActivity extends AppCompatActivity {
     private ActivityEventDetailBinding binding;
     private Date startDate;
     private Date endDate;
-    private String originalEventName;
+
     @SuppressWarnings("FieldCanBeLocal")
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+
+    private String originalEventName;
     private String userId;
     private String mData;
 
@@ -83,8 +84,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         binding = ActivityEventDetailBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        setContentView(root);
+        setContentView(binding.getRoot());
 
         Intent i = getIntent();
 
@@ -120,8 +120,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
         binding.eventDetailBackFab.setOnClickListener(v -> {
             Intent mainIntent = new Intent(this, MainActivity.class);
-            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(mainIntent);
             finish();
         });
@@ -165,6 +164,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 } else {
                     update();
                 }
+
                 break;
             }
 
@@ -188,6 +188,7 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void loadData(@NonNull String jsonString) {
+        // Event's all fields are expected to be non-null
         Event e = new Gson().fromJson(jsonString, Event.class);
 
         if (e == null) return;
@@ -199,16 +200,18 @@ public class EventDetailActivity extends AppCompatActivity {
         startDate = e.getStartDate();
         endDate = e.getEndDate();
 
-        final String formattedStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale)
+        final String formattedStartDate = DateFormat
+                .getDateInstance(DateFormat.DEFAULT, mLocale)
                 .format(e.getStartDate());
 
-        final String formattedEndDate = DateFormat.getDateInstance(DateFormat.DEFAULT, mLocale)
+        final String formattedEndDate = DateFormat
+                .getDateInstance(DateFormat.DEFAULT, mLocale)
                 .format(e.getEndDate());
 
         binding.eventDetailStartDate.setText(formattedStartDate);
         binding.eventDetailEndDate.setText(formattedEndDate);
 
-        String location = e.getLocation().getLatitude() + "," + e.getLocation().getLongitude();
+        String location = EventUtil.getLocationText(e.getLocation());
         binding.eventDetailLocation.setText(location);
 
         ArrayAdapter<CharSequence> reminderFreqAdapter = ArrayAdapter.createFromResource(
@@ -220,7 +223,9 @@ public class EventDetailActivity extends AppCompatActivity {
         reminderFreqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.eventDetailReminderFreq.setAdapter(reminderFreqAdapter);
 
-        List<String> freqChoices = Arrays.asList(getResources().getStringArray(R.array.reminder_freq));
+        List<String> freqChoices = Arrays.asList(
+                getResources().getStringArray(R.array.reminder_freq)
+        );
         binding.eventDetailReminderFreq.setSelection(freqChoices.indexOf(e.getReminderFreq()));
 
         ArrayAdapter<CharSequence> reminderTypeAdapter = ArrayAdapter.createFromResource(
@@ -232,7 +237,9 @@ public class EventDetailActivity extends AppCompatActivity {
         reminderTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.eventDetailReminderType.setAdapter(reminderTypeAdapter);
 
-        List<String> typeChoices = Arrays.asList(getResources().getStringArray(R.array.reminder_type));
+        List<String> typeChoices = Arrays.asList(
+                getResources().getStringArray(R.array.reminder_type)
+        );
         binding.eventDetailReminderType.setSelection(typeChoices.indexOf(e.getReminderType()));
 
         binding.eventDetailType.setText(e.getType());
@@ -404,20 +411,19 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void openReminders() {
-        Intent reminderListIntent = new Intent(this, ReminderListActivity.class);
-
         if (originalEventName == null) {
             binding.eventDetailEventName.setError(getString(R.string.event_name_required));
             binding.eventDetailEventName.requestFocus();
             return;
         }
 
+        Intent reminderListIntent = new Intent(this, ReminderListActivity.class);
+
         reminderListIntent.putExtra("name", originalEventName);
         reminderListIntent.putExtra("event", mData);
         startActivity(reminderListIntent);
     }
 
-    @SuppressWarnings("CodeBlock2Expr")
     private void save() {
         if (startDate.after(endDate)) {
             Toast.makeText(this,
@@ -426,64 +432,57 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        final String nameFinal = binding.eventDetailEventName.getText().toString().trim();
-        final String detailFinal = binding.eventDetailDetail.getText().toString().trim();
-        final Date startDateFinal = startDate;
-        final Date endDateFinal = endDate;
-        final String[] locationText = binding.eventDetailLocation.getText()
-                .toString()
-                .trim()
-                .split(",");
-
-        GeoPoint location;
-
-        try {
-            location = new GeoPoint(
-                    Double.parseDouble(locationText[0]),
-                    Double.parseDouble(locationText[1])
-            );
-        } catch (Exception e) {
-            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
-            binding.eventDetailLocation.requestFocus();
-            return;
-        }
-
-        final GeoPoint locationFinal = location;
-        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
-        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
-        final String typeFinal = binding.eventDetailType.getText().toString().trim();
-
-        if (TextUtils.isEmpty(nameFinal)) {
-            binding.eventDetailEventName.setError(getString(R.string.field_empty_message));
-            binding.eventDetailEventName.requestFocus();
-            return;
-        }
-
-        if (TextUtils.isEmpty(detailFinal)) {
-            binding.eventDetailDetail.setError(getString(R.string.field_empty_message));
-            binding.eventDetailDetail.requestFocus();
-            return;
-        }
-
-        if (startDateFinal == null) {
+        if (startDate == null) {
             binding.eventDetailStartDate.setError(getString(R.string.field_empty_message));
             binding.eventDetailStartDate.requestFocus();
             return;
         }
 
-        if (endDateFinal == null) {
+        if (endDate == null) {
             binding.eventDetailEndDate.setError(getString(R.string.field_empty_message));
             binding.eventDetailEndDate.requestFocus();
             return;
         }
 
+        final String name = binding.eventDetailEventName.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name)) {
+            binding.eventDetailEventName.setError(getString(R.string.field_empty_message));
+            binding.eventDetailEventName.requestFocus();
+            return;
+        }
+
+        final String detail = binding.eventDetailDetail.getText().toString().trim();
+
+        if (TextUtils.isEmpty(detail)) {
+            binding.eventDetailDetail.setError(getString(R.string.field_empty_message));
+            binding.eventDetailDetail.requestFocus();
+            return;
+        }
+
+        final GeoPoint location = EventUtil.getLocationFromText(
+                binding.eventDetailLocation.getText().toString()
+        );
+
+        if (location == null) {
+            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
+            binding.eventDetailLocation.requestFocus();
+            return;
+        }
+
+        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
+
         if (TextUtils.isEmpty(reminderFreqFinal)) {
             return;
         }
 
+        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
+
         if (TextUtils.isEmpty(reminderTypeFinal)) {
             return;
         }
+
+        final String typeFinal = binding.eventDetailType.getText().toString().trim();
 
         if (TextUtils.isEmpty(typeFinal)) {
             binding.eventDetailType.setError(getString(R.string.field_empty_message));
@@ -492,14 +491,14 @@ public class EventDetailActivity extends AppCompatActivity {
         }
 
         Map<String, Object> event = new HashMap<>();
-        event.put(Constants.EventFields.DETAIL, detailFinal);
-        event.put(Constants.EventFields.END_DATE, endDateFinal);
-        event.put(Constants.EventFields.LOCATION, locationFinal);
-        event.put(Constants.EventFields.NAME, nameFinal);
+        event.put(Constants.EventFields.DETAIL, detail);
+        event.put(Constants.EventFields.END_DATE, endDate);
+        event.put(Constants.EventFields.LOCATION, location);
+        event.put(Constants.EventFields.NAME, name);
         event.put(Constants.EventFields.REMINDER_FREQ, reminderFreqFinal);
         event.put(Constants.EventFields.REMINDER_TYPE, reminderTypeFinal);
         event.put(Constants.EventFields.REMINDERS, new ArrayList<Date>());
-        event.put(Constants.EventFields.START_DATE, startDateFinal);
+        event.put(Constants.EventFields.START_DATE, startDate);
         event.put(Constants.EventFields.TYPE, typeFinal);
 
         Task<DocumentReference> result = db.collection(Constants.Collections.USERS)
@@ -512,17 +511,17 @@ public class EventDetailActivity extends AppCompatActivity {
 
             NotificationUtil.startRepeatingNotification(
                     this,
-                    startDateFinal,
+                    startDate,
                     requestCode,
-                    nameFinal,
-                    detailFinal,
+                    name,
+                    detail,
                     reminderFreqFinal
             );
 
             if (reminderTypeFinal.equals(Constants.ReminderTypes.SOUND)) {
-                NotificationUtil.startSound(this, startDateFinal, requestCode);
+                NotificationUtil.startSound(this, startDate, requestCode);
             } else if (reminderTypeFinal.equals(Constants.ReminderTypes.VIBRATION)) {
-                NotificationUtil.startVibration(this, startDateFinal, requestCode);
+                NotificationUtil.startVibration(this, startDate, requestCode);
             } else {
                 Log.e(TAG, "Unknown reminder type");
             }
@@ -533,12 +532,25 @@ public class EventDetailActivity extends AppCompatActivity {
         });
 
         result.addOnFailureListener(e -> {
+            Log.e(TAG, "Save operation failed");
             Toast.makeText(this,
                     R.string.new_event_error_message, Toast.LENGTH_SHORT).show();
         });
     }
 
     private void update() {
+        if (startDate == null) {
+            binding.eventDetailStartDate.setError(getString(R.string.field_empty_message));
+            binding.eventDetailStartDate.requestFocus();
+            return;
+        }
+
+        if (endDate == null) {
+            binding.eventDetailEndDate.setError(getString(R.string.field_empty_message));
+            binding.eventDetailEndDate.requestFocus();
+            return;
+        }
+
         if (startDate.after(endDate)) {
             Toast.makeText(this,
                     R.string.event_date_err_message, Toast.LENGTH_SHORT).show();
@@ -546,64 +558,45 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        final String nameFinal = binding.eventDetailEventName.getText().toString().trim();
-        final String detailFinal = binding.eventDetailDetail.getText().toString().trim();
-        final Date startDateFinal = startDate;
-        final Date endDateFinal = endDate;
-        final String[] locationText = binding.eventDetailLocation.getText()
-                .toString()
-                .trim()
-                .split(",");
+        final String name = binding.eventDetailEventName.getText().toString().trim();
 
-        GeoPoint location;
-
-        try {
-            location = new GeoPoint(
-                    Double.parseDouble(locationText[0]),
-                    Double.parseDouble(locationText[1])
-            );
-        } catch (Exception e) {
-            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
-            binding.eventDetailLocation.requestFocus();
-            return;
-        }
-
-        final GeoPoint locationFinal = location;
-        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
-        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
-        final String typeFinal = binding.eventDetailType.getText().toString().trim();
-
-        if (TextUtils.isEmpty(nameFinal)) {
+        if (TextUtils.isEmpty(name)) {
             binding.eventDetailEventName.setError(getString(R.string.field_empty_message));
             binding.eventDetailEventName.requestFocus();
             return;
         }
 
-        if (TextUtils.isEmpty(detailFinal)) {
+        final String detail = binding.eventDetailDetail.getText().toString().trim();
+
+        if (TextUtils.isEmpty(detail)) {
             binding.eventDetailDetail.setError(getString(R.string.field_empty_message));
             binding.eventDetailDetail.requestFocus();
             return;
         }
 
-        if (startDateFinal == null) {
-            binding.eventDetailStartDate.setError(getString(R.string.field_empty_message));
-            binding.eventDetailStartDate.requestFocus();
+        GeoPoint location = EventUtil.getLocationFromText(
+                binding.eventDetailLocation.getText().toString()
+        );
+
+        if (location == null) {
+            binding.eventDetailLocation.setError(getString(R.string.format_error_message));
+            binding.eventDetailLocation.requestFocus();
             return;
         }
 
-        if (endDateFinal == null) {
-            binding.eventDetailEndDate.setError(getString(R.string.field_empty_message));
-            binding.eventDetailEndDate.requestFocus();
-            return;
-        }
+        final String reminderFreqFinal = (String) binding.eventDetailReminderFreq.getSelectedItem();
 
         if (TextUtils.isEmpty(reminderFreqFinal)) {
             return;
         }
 
+        final String reminderTypeFinal = (String) binding.eventDetailReminderType.getSelectedItem();
+
         if (TextUtils.isEmpty(reminderTypeFinal)) {
             return;
         }
+
+        final String typeFinal = binding.eventDetailType.getText().toString().trim();
 
         if (TextUtils.isEmpty(typeFinal)) {
             binding.eventDetailType.setError(getString(R.string.field_empty_message));
@@ -622,16 +615,18 @@ public class EventDetailActivity extends AppCompatActivity {
                 if (e == null) continue;
 
                 if (e.getName() != null && e.getName().equals(originalEventName)) {
-                    s.getReference().update(
-                            Constants.EventFields.DETAIL, detailFinal,
-                            Constants.EventFields.END_DATE, endDateFinal,
-                            Constants.EventFields.LOCATION, locationFinal,
-                            Constants.EventFields.NAME, nameFinal,
+                    Task<Void> updateTask = s.getReference().update(
+                            Constants.EventFields.DETAIL, detail,
+                            Constants.EventFields.END_DATE, endDate,
+                            Constants.EventFields.LOCATION, location,
+                            Constants.EventFields.NAME, name,
                             Constants.EventFields.REMINDER_FREQ, reminderFreqFinal,
                             Constants.EventFields.REMINDER_TYPE, reminderTypeFinal,
-                            Constants.EventFields.START_DATE, startDateFinal,
+                            Constants.EventFields.START_DATE, startDate,
                             Constants.EventFields.TYPE, typeFinal
-                    ).addOnCompleteListener(task -> {
+                    );
+
+                    updateTask.addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(this,
                                     R.string.update_ok_message, Toast.LENGTH_SHORT).show();
@@ -706,7 +701,9 @@ public class EventDetailActivity extends AppCompatActivity {
         result.addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 final int requestCode = documentSnapshot.getId().hashCode();
-                final String reminderType = documentSnapshot.getString(Constants.EventFields.REMINDER_TYPE);
+                final String reminderType = documentSnapshot.getString(
+                        Constants.EventFields.REMINDER_TYPE
+                );
 
                 Task<Void> deleteResult = documentSnapshot.getReference().delete();
 
@@ -767,8 +764,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 return;
             }
 
-            final String locationText = location.getLatitude() + ","
-                    + location.getLongitude();
+            final String locationText = location.getLatitude() + "," + location.getLongitude();
             binding.eventDetailLocation.setText(locationText);
         });
     }

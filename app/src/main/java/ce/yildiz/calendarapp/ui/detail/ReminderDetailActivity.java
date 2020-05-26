@@ -31,7 +31,6 @@ import ce.yildiz.calendarapp.util.Constants;
 import ce.yildiz.calendarapp.util.NotificationUtil;
 import ce.yildiz.calendarapp.util.SharedPreferencesUtil;
 
-@SuppressWarnings("CodeBlock2Expr")
 public class ReminderDetailActivity extends AppCompatActivity {
     private static final String TAG = ReminderDetailActivity.class.getSimpleName();
 
@@ -92,16 +91,17 @@ public class ReminderDetailActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        binding.reminderDetailDatePicker.setOnDateChangedListener((view, year, monthOfYear, dayOfMonth) -> {
-            mDate.setYear(year - Constants.DATE_YEAR_DIFF);
-            mDate.setMonth(monthOfYear);
-            mDate.setDate(dayOfMonth);
+        binding.reminderDetailDatePicker.setOnDateChangedListener(
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    mDate.setYear(year - Constants.DATE_YEAR_DIFF);
+                    mDate.setMonth(monthOfYear);
+                    mDate.setDate(dayOfMonth);
 
-            String dateText = getString(R.string.date) + " "
-                    + DateFormat.getDateInstance(DateFormat.FULL, locale).format(mDate);
+                    String dateText = getString(R.string.date) + " "
+                            + DateFormat.getDateInstance(DateFormat.FULL, locale).format(mDate);
 
-            binding.reminderDetailStatusText.setText(dateText);
-        });
+                    binding.reminderDetailStatusText.setText(dateText);
+                });
 
         binding.reminderDetailTimePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> {
             mDate.setHours(hourOfDay);
@@ -230,6 +230,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
         });
 
         result.addOnFailureListener(e -> {
+            Log.e(TAG, "Reminder save failed");
             Toast.makeText(this,
                     R.string.reminder_add_error_message, Toast.LENGTH_SHORT).show();
         });
@@ -281,6 +282,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
                 });
 
                 updateResult.addOnFailureListener(err -> {
+                    Log.e(TAG, "Reminder update failed");
                     Toast.makeText(this,
                             R.string.reminder_update_error_message, Toast.LENGTH_SHORT).show();
                 });
@@ -288,6 +290,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
         });
 
         result.addOnFailureListener(e -> {
+            Log.e(TAG, "Reminder update failed");
             Toast.makeText(this,
                     R.string.reminder_update_error_message, Toast.LENGTH_SHORT).show();
         });
@@ -339,6 +342,7 @@ public class ReminderDetailActivity extends AppCompatActivity {
         });
 
         result.addOnFailureListener(e -> {
+            Log.e(TAG, "Reminder delete failed");
             Toast.makeText(this,
                     R.string.reminder_delete_error_message, Toast.LENGTH_SHORT).show();
         });
