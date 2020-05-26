@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,18 +57,19 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        setContentView(root);
+        setContentView(binding.getRoot());
 
         DocumentReference documentReference = db.collection(Constants.Collections.USERS)
                 .document(userId);
+
         documentReference.addSnapshotListener(this, (documentSnapshot, e) -> {
             if (documentSnapshot == null) {
                 return;
             }
 
             final String email = documentSnapshot.getString(Constants.UserFields.EMAIL);
-            final String gUsername = documentSnapshot.getString(Constants.UserFields.GITHUB_USERNAME);
+            final String gUsername = documentSnapshot.
+                    getString(Constants.UserFields.GITHUB_USERNAME);
             final String pictureURL = StringUtil.getUserImageURL(gUsername);
 
             binding.mainEmailText.setText(email);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            Intent dailyPlanIntent = new Intent(MainActivity.this, DailyPlanActivity.class);
+            Intent dailyPlanIntent = new Intent(this, DailyPlanActivity.class);
             dailyPlanIntent.putExtra("year", year);
             dailyPlanIntent.putExtra("month", month);
             dailyPlanIntent.putExtra("day", dayOfMonth);
@@ -91,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.mainWeeklyPlanText.setOnClickListener(v -> {
-            Intent weeklyPlanIntent = new Intent(MainActivity.this, WeeklyPlanActivity.class);
+            Intent weeklyPlanIntent = new Intent(this, WeeklyPlanActivity.class);
             startActivity(weeklyPlanIntent);
         });
 
         binding.mainMonthlyPlanText.setOnClickListener(v -> {
-            Intent monthlyPlanIntent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
+            Intent monthlyPlanIntent = new Intent(this, MonthlyPlanActivity.class);
             startActivity(monthlyPlanIntent);
         });
     }
@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_settings:
-                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 finish();
                 break;
             case R.id.menu_logout:
                 FirebaseAuth.getInstance().signOut();
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent loginIntent = new Intent(this, LoginActivity.class);
                 startActivity(loginIntent);
                 finish();
                 break;
