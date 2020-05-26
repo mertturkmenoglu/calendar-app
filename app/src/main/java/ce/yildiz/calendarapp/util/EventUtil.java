@@ -41,7 +41,7 @@ public class EventUtil {
 
         String location = "";
         if (event.getLocation() != null) {
-            location = getLocationText(event.getLocation());
+            location = getLocationShareText(event.getLocation());
         }
 
         @SuppressWarnings("StringBufferReplaceableByString")
@@ -68,8 +68,13 @@ public class EventUtil {
     }
 
     @NonNull
-    private static String getLocationText(@NonNull GeoPoint location) {
+    private static String getLocationShareText(@NonNull GeoPoint location) {
         return "[" + location.getLatitude() + ", " + location.getLongitude() + "]";
+    }
+
+    @NonNull
+    public static String getLocationText(@NonNull GeoPoint location) {
+        return location.getLatitude() + "," + location.getLongitude();
     }
 
     @Nullable
